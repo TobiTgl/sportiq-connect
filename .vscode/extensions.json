@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
+    "esbenp.prettier-vscode",
+    "pkief.material-icon-theme",
+    "ms-vscode.vscode-typescript-next",
+    "ecmel.vscode-html-css"
+  ]
+}
