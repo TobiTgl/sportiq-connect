@@ -1,0 +1,35 @@
+<v-container class="impressum pt-10" fluid>
+  <v-row justify="center">
+    <v-col cols="12" xl="4" lg="5" md="6" sm="9" xs="12">
+      <v-card outlined class="pa-3 bg-background" flat>
+        <v-card-title>Impressum</v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-card-text class="">
+          <p class="text-justify">
+            This website is intended solely for private and non-commercial use.
+            Any use of the website for commercial purposes is strictly
+            prohibited. By using this website, you agree to use the website for
+            private and non-commercial purposes only.
+          </p>
+          <p class="mt-5">
+            Developer: Nick Nowak, Sahin Karakoc amd Tobias Toegel
+          </p>
+          <p>
+            Organisation:
+            <a href="https://www.htwg-konstanz.de" target="_blank"
+              >HTWG Konstanz</a
+            >
+          </p>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn router color="primary" :to="{name: 'Home'}"> Home </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
+</v-container>

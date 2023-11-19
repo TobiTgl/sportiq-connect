@@ -1,0 +1,50 @@
+<v-app-bar class="custom-app-bar">
+  <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+  <v-app-bar-title style="cursor: pointer" @click.prevent="$router.push('/')">
+    Project name
+  </v-app-bar-title>
+
+  <v-chip v-if="!xs" class="mx-2">
+    <v-avatar left>
+      <v-icon>mdi-account-circle</v-icon>
+    </v-avatar>
+    <p class="mx-2">Username</p>
+  </v-chip>
+
+  <v-btn
+    v-if="xs && !xs"
+    icon="mdi-theme-light-dark"
+    @click="toggleTheme"
+  ></v-btn>
+</v-app-bar>
+
+<v-navigation-drawer v-model="drawer">
+  <v-list class="mt-5">
+    <v-list-item prepend-icon="mdi-account-circle" title="Username" />
+  </v-list>
+
+  <v-divider class="mt-5"></v-divider>
+
+  <v-list>
+    <v-list-item
+      v-for="item in features"
+      :key="item.title"
+      :title="item.title"
+      :prepend-icon="item.icon"
+      link
+      router
+      :to="{ name: item.route }"
+    />
+  </v-list>
+
+  <v-divider class="mt-5"></v-divider>
+
+  <v-list nav>
+    <v-list-item
+      :title="themeTitle"
+      prepend-icon="mdi-theme-light-dark"
+      @click="toggleTheme"
+    />
+  </v-list>
+</v-navigation-drawer>

@@ -1,0 +1,17 @@
+<section class="custom-footer">
+  <v-footer>
+    <v-row justify="center" no-gutters>
+      <v-col class="text-center" cols="12">
+        <v-btn
+          variant="plain"
+          router
+          :to="{name: 'Impressum'}"
+          class="no-underline"
+        >
+          Impressum
+        </v-btn>
+        &copy; {{ new Date().getFullYear() }} - Version: {{appVersion}}
+      </v-col>
+    </v-row>
+  </v-footer>
+</section>
