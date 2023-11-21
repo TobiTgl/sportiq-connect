@@ -5,6 +5,7 @@
     "esbenp.prettier-vscode",
     "pkief.material-icon-theme",
     "ms-vscode.vscode-typescript-next",
-    "ecmel.vscode-html-css"
+    "ecmel.vscode-html-css",
+    "archsense.architecture-view-nestjs"
   ]
 }

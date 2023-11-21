@@ -1,44 +1,25 @@
-# default
+<p align="center">
+  <img src="https://vuejs.org/logo.svg" width="200" alt="Vue Logo" />
+</p>
 
-## Project setup
+<p align="center">Build with <a href="http://vuejs.org" target="_blank">Vue.js</a>, an approachable, performant and versatile framework for building web user interfaces.</p>
 
-```
-# yarn
-yarn
+## Description
 
-# npm
+This project is the frontend of the application.
+
+## Installation
+
+```bash
 npm install
-
-# pnpm
-pnpm install
 ```
 
-### Compiles and hot-reloads for development
+## Running the app
 
-```
-# yarn
-yarn dev
-
-# npm
+```bash
+# Compiles and hot-reloads for development
 npm run dev
 
-# pnpm
-pnpm dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
+# Compiles and minifies for production
 npm run build
-
-# pnpm
-pnpm build
 ```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
