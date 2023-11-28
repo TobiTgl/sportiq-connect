@@ -22,4 +22,7 @@ npm run dev
 
 # Compiles and minifies for production
 npm run build
+
+# Serve build application
+npm run serve
 ```
