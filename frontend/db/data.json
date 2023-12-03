@@ -1,0 +1,24 @@
+{
+  "tenants": [
+    {
+      "id": 1,
+      "theme": {
+        "colors": {
+          "background": "#654321",
+          "primary": "#123456",
+          "secondary": "#654123"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "theme": {
+        "colors": {
+          "background": "#fff123",
+          "primary": "#123fff",
+          "secondary": "#fefefe"
+        }
+      }
+    }
+  ]
+}
