@@ -1,6 +1,15 @@
 <v-app-bar class="custom-app-bar">
   <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
+  <img
+    alt="logo"
+    src="@/assets/logo.svg"
+    height="40"
+    class="d-inline-block align-top ml-2"
+    style="cursor: pointer"
+    @click.prevent="$router.push('/')"
+  />
+
   <v-app-bar-title style="cursor: pointer" @click.prevent="$router.push('/')">
     Project name
   </v-app-bar-title>
