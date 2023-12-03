@@ -44,7 +44,14 @@ The commands for each application can be found in the subfolders
 ## Build
 
 ```bash
-TODO: add docker compose Befehl
+# build applikation with docker
+$ docker-compose up -d
+
+# build backend with docker
+$ docker build ./backend -t cloud-project-backend
+
+# build frontend with docker
+$ docker build ./frontend -t cloud-project-frontend
 ```
 
 ## License
