@@ -6,7 +6,7 @@ export class GatewayController {
   constructor(private readonly service: GatewayService) {}
 
   @Get()
-  getHello(): Promise<String> {
-    return this.service.getHello();
+  hello(): Promise<String> {
+    return this.service.hello();
   }
 }
