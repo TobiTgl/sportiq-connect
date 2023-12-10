@@ -1,11 +1,11 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/plugins/firebaseConfig";
 
 export const useAuthState = () => {
   const user = ref(null);
   const error = ref(null);
 
-  const auth = getAuth();
   let unsubscribe: any;
 
   onMounted(() => {
