@@ -21,6 +21,10 @@
     <p class="mx-2">Username</p>
   </v-chip>
 
+  <v-btn v-if="!xs" prepend-icon="mdi-login" to="/login" rounded>
+    Login
+  </v-btn>
+
   <v-btn
     v-if="xs && !xs"
     icon="mdi-theme-light-dark"
