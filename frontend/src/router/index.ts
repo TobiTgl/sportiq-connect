@@ -28,13 +28,13 @@ const routes = [
         path: "home",
         name: "Startpage",
         component: Home,
-        meta: { requiresUnAuth: true },
+        meta: { requiresNoAuth: true },
       },
       {
         path: "impressum",
         name: "Impressum",
         component: Impressum,
-        meta: { requiresAuth: true },
+        meta: { requiresNoAuth: true },
       },
     ],
   },
@@ -60,20 +60,16 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const isAuth = await getUserState();
-  const requiresUnAuth = to.matched.some(
-    (record) => record.meta.requiresUnAuth
+  const requiresNoAuth = to.matched.some(
+    (record) => record.meta.requiresNoAuth
   );
 
-  if (requiresUnAuth === false && !isAuth) {
-    next({ name: "Login" });
-  } else if (requiresUnAuth && isAuth) {
-    if (to.name === "Impressum") {
-      next();
-    } else {
-      next("/home");
-    }
-  } else {
+  if ((to.name === "Login" || to.name === "Register") && isAuth) {
+    next("/home");
+  } else if (requiresNoAuth) {
     next();
+  } else if (!isAuth) {
+    next("/login");
   }
 });
 

@@ -25,14 +25,12 @@
     </template>
     <v-list class="ma-0 pa-0" rounded="xl">
       <!-- TODO: change route of profil button to the correct destination -->
-      <v-list-item class="dropdown-button" link router :to="{ name: '' }">
+      <v-list-item @click.prevent="goTo('Home')" class="dropdown-button">
         <v-list-item-title class="text-center"> Profil </v-list-item-title>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item class="dropdown-button">
-        <v-list-item-title class="text-center" @click.prevent="handleLogout">
-          Logout
-        </v-list-item-title>
+      <v-list-item @click.prevent="handleLogout" class="dropdown-button">
+        <v-list-item-title class="text-center"> Logout </v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>

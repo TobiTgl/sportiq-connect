@@ -33,7 +33,7 @@ export default {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    const handleLogout = async (e: any) => {
+    const handleLogout = async () => {
       await signOut(auth)
         .then(() => {
           router.push("/");
@@ -43,6 +43,10 @@ export default {
         });
     };
 
+    const goTo = async (route: String) => {
+      router.push({ name: "" + route });
+    };
+
     return {
       toggleTheme,
       xs,
@@ -50,6 +54,7 @@ export default {
       drawer,
       user,
       handleLogout,
+      goTo,
     };
   },
 };
