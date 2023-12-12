@@ -1,3 +1,28 @@
-<v-container fluid class="login">
-  <!-- Hier html einfügen -->
-</v-container>
+<v-app>
+  <custom-app-bar></custom-app-bar>
+  <v-main>
+    <v-container class="fill-height" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" xl="4" lg="5" md="6" sm="9" xs="12">
+          <v-card
+            outlined
+            class="pa-xl-12 pa-lg-10 pa-md-8 pa-sm-6 pa-xs-4 justify-center rounded-lg dark"
+            :flat="xs"
+          >
+            <v-card-text justify="center">
+              <v-row justify="end">
+                <v-col>
+                  Don't have an account yet?
+                  <p>
+                    <router-link to="/register">Register here!</router-link>
+                  </p>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
+  <custom-footer></custom-footer>
+</v-app>
