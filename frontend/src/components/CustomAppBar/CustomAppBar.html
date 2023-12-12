@@ -29,8 +29,15 @@
 </v-app-bar>
 
 <v-navigation-drawer v-model="drawer">
-  <v-list class="mt-5">
-    <v-list-item prepend-icon="mdi-account-circle" title="Username" />
+  <v-list-item prepend-icon="mdi-account-circle" title="Username" />
+  <v-list v-if="xs" class="mt-5">
+    <v-list-item
+      title="Login"
+      prepend-icon="mdi-login"
+      link
+      router
+      :to="{ name: 'Login' }"
+    />
   </v-list>
 
   <v-divider class="mt-5"></v-divider>
