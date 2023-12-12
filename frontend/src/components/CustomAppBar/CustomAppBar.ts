@@ -1,6 +1,8 @@
 import { useTheme } from "vuetify";
 import { useDisplay } from "vuetify";
 import { ref } from "vue";
+import { getAuth, signOut } from "firebase/auth";
+import router from "@/router";
 
 export default {
   name: "customAppBar",
@@ -28,11 +30,26 @@ export default {
       themeTitle.value = theme.global.current.value.dark ? "Dunkel" : "Hell";
     };
 
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const handleLogout = async (e: any) => {
+      await signOut(auth)
+        .then(() => {
+          router.push("/");
+        })
+        .catch((error) => {
+          console.log(error.code);
+        });
+    };
+
     return {
       toggleTheme,
       xs,
       themeTitle,
       drawer,
+      user,
+      handleLogout,
     };
   },
 };
