@@ -39,11 +39,7 @@
     Login
   </v-btn>
 
-  <v-btn
-    v-if="xs && !xs"
-    icon="mdi-theme-light-dark"
-    @click="toggleTheme"
-  ></v-btn>
+  <v-btn v-if="!xs" icon="mdi-theme-light-dark" @click="toggleTheme"></v-btn>
 </v-app-bar>
 
 <v-navigation-drawer v-model="drawer">
