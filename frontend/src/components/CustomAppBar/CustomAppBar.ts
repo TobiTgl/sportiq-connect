@@ -37,6 +37,7 @@ export default {
       await signOut(auth)
         .then(() => {
           router.push("/");
+          location.reload();
         })
         .catch((error) => {
           console.log(error.code);
