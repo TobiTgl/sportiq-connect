@@ -5,6 +5,7 @@ import NotFoundPage from "@/views/NotFoundPage/index.vue";
 import Impressum from "@/views/Impressum/index.vue";
 import Home from "@/views/Home/index.vue";
 import Login from "@/views/Login/index.vue";
+import Register from "@/views/Register/index.vue";
 import { getUserState } from "@/store/authStore";
 
 const routes = [
@@ -16,7 +17,13 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-    meta: { requiresUnAuth: true },
+    meta: { requiresNoAuth: true },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
+    meta: { requiresNoAuth: true },
   },
   {
     path: "/",
