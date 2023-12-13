@@ -97,9 +97,13 @@ export default {
               errorMessage.value =
                 "The provided value for the password is invalid.";
               break;
-            case "auth/auth/email-already-exists":
+            case "auth/email-already-exists":
               errorMessage.value =
-                "The provided email is already in use by an existing user. If you try to login, use the login page!.";
+                "The provided email is already in use by an existing user. If you try to login, please use the login page!.";
+              break;
+            case "auth/email-already-in-use":
+              errorMessage.value =
+                "The provided email is already in use by an existing user. If you try to login, please use the login page!.";
               break;
             default:
               errorMessage.value = error.message;
