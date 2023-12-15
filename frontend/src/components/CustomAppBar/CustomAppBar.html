@@ -14,23 +14,49 @@
     Project name
   </v-app-bar-title>
 
-  <v-chip v-if="!xs" class="mx-2">
-    <v-avatar left>
-      <v-icon>mdi-account-circle</v-icon>
-    </v-avatar>
-    <p class="mx-2">Username</p>
-  </v-chip>
+  <v-menu v-if="!xs && user">
+    <template v-slot:activator="{ props }">
+      <v-chip class="mx-2" v-bind="props" append-icon="mdi-menu-down">
+        <v-avatar left>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-avatar>
+        <div class="mx-2">{{ user.displayName }}</div>
+      </v-chip>
+    </template>
+    <v-list class="ma-0 pa-0" rounded="xl">
+      <!-- TODO: change route of profil button to the correct destination -->
+      <v-list-item @click.prevent="goTo('Home')" class="dropdown-button">
+        <v-list-item-title class="text-center"> Profil </v-list-item-title>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item @click.prevent="handleLogout" class="dropdown-button">
+        <v-list-item-title class="text-center"> Logout </v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
 
-  <v-btn
-    v-if="xs && !xs"
-    icon="mdi-theme-light-dark"
-    @click="toggleTheme"
-  ></v-btn>
+  <v-btn v-if="!xs && !user" prepend-icon="mdi-login" to="/login" rounded>
+    Login
+  </v-btn>
+
+  <v-btn v-if="!xs" icon="mdi-theme-light-dark" @click="toggleTheme"></v-btn>
 </v-app-bar>
 
 <v-navigation-drawer v-model="drawer">
-  <v-list class="mt-5">
-    <v-list-item prepend-icon="mdi-account-circle" title="Username" />
+  <v-list v-if="xs" class="mt-5">
+    <v-list-item
+      v-if="user"
+      prepend-icon="mdi-account-circle"
+      :title="user.displayName"
+    />
+    <v-list-item
+      v-if="!user"
+      title="Login"
+      prepend-icon="mdi-login"
+      link
+      router
+      :to="{ name: 'Login' }"
+    />
   </v-list>
 
   <v-divider class="mt-5"></v-divider>
