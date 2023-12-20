@@ -25,8 +25,13 @@
     </template>
     <v-list class="ma-0 pa-0" rounded="xl">
       <!-- TODO: change route of profil button to the correct destination -->
-      <v-list-item @click.prevent="goTo('Home')" class="dropdown-button">
-        <v-list-item-title class="text-center"> Profil </v-list-item-title>
+      <v-list-item style="cursor: pointer" class="dropdown-button">
+        <v-list-item-title
+          class="text-center"
+          @click.prevent="$router.push('/profile')"
+        >
+          Profil
+        </v-list-item-title>
       </v-list-item>
       <v-divider></v-divider>
       <v-list-item @click.prevent="handleLogout" class="dropdown-button">
