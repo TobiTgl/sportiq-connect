@@ -10,6 +10,7 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private authData: any = {};
 
+  //Fetch athlete data from Strava with accesstoken currently from env file
   public async athleteData(): Promise<String> {
     const stravaAthleteUrl = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
     const dataAthlete = await firstValueFrom(
@@ -32,6 +33,7 @@ export class AuthService {
     return dataAthlete.data;
   }
 
+  //Authenticates the user with Strava (receives access token & refresh token)
   public async stravaAuth(queryParams: any): Promise<String> {
     const authUrl = `https://www.strava.com/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${queryParams.code}&grant_type=authorization_code`;
     if ('error' in queryParams && queryParams.error === 'access_denied') {
@@ -54,6 +56,7 @@ export class AuthService {
     return 'You are now connected to Strava! You can close this window.';
   }
 
+  //Refreshes the access token (should be called before every request to Strava)
   public async getRefreshToken(): Promise<String> {
     const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&refresh_token=${process.env.REFRESH_TOKEN}&grant_type=refresh_token`;
     let expires_at = 1702047464;
