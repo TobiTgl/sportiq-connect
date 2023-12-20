@@ -5,6 +5,7 @@ import NotFoundPage from "@/views/NotFoundPage/index.vue";
 import Impressum from "@/views/Impressum/index.vue";
 import Home from "@/views/Home/index.vue";
 import Login from "@/views/Login/index.vue";
+import Profile from "@/views/Profile/index.vue";
 import Register from "@/views/Register/index.vue";
 import { getUserState } from "@/store/authStore";
 
@@ -41,6 +42,12 @@ const routes = [
         path: "impressum",
         name: "Impressum",
         component: Impressum,
+        meta: { requiresNoAuth: true },
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
         meta: { requiresNoAuth: true },
       },
     ],
