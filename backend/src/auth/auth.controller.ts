@@ -11,5 +11,4 @@ export class AuthController {
   hello(): Promise<String> {
     return this.service.hello();
   }
-
 }
