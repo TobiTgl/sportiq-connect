@@ -5,9 +5,16 @@ import { GatewayService } from './gateway.service';
 import { AdministrationModule } from 'src/administration/administration.module';
 import { AnalysisModule } from 'src/analysis/analysis.module';
 import { ReportModule } from 'src/report/report.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, AdministrationModule, AnalysisModule, ReportModule],
+  imports: [
+    AuthModule,
+    AdministrationModule,
+    AnalysisModule,
+    ReportModule,
+    ConfigModule.forRoot(),
+  ],
   controllers: [GatewayController],
   providers: [GatewayService],
 })
