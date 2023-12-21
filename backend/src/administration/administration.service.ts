@@ -1,10 +1,20 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
+import { Firestore } from 'firebase-admin/firestore';
 @Injectable()
 export class AdministrationService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    @Inject('FirestoreAdmin') private readonly firestore: Firestore,
+  ) {}
 
   private readonly logger = new Logger(AdministrationService.name);
   private authData: any = {};
@@ -52,6 +62,16 @@ export class AdministrationService {
     );
     this.authData = dataAuth;
     console.log(this.authData.data);
+
+    const docRef = this.firestore
+      .collection('administration-service')
+      .doc('userid(123)');
+
+    await docRef.set({
+      username: 'Ade',
+      stravaAccessToken: this.authData.data.access_token,
+      stravaRefreshToken: this.authData.data.refresh_token,
+    });
     return 'You are now connected to Strava! You can close this window.';
   }
 
@@ -79,6 +99,25 @@ export class AdministrationService {
   }
 
   public async hello(): Promise<String> {
+    const collection = this.firestore.collection('administration-service');
+    console.log(collection);
+
+    const snapshot = await this.firestore
+      .collection('administration-service')
+      .get();
+    snapshot.forEach((doc) => {
+      console.log(doc.id, '=>', doc.data());
+    });
+    const docRef = this.firestore
+      .collection('administration-service')
+      .doc('alovelace');
+
+    await docRef.set({
+      first: 'Ada',
+      last: 'Lovelace',
+      born: 1815,
+    });
+
     return 'Hello! I am the administration microservice.';
   }
 }
