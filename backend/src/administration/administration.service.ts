@@ -108,15 +108,6 @@ export class AdministrationService {
     snapshot.forEach((doc) => {
       console.log(doc.id, '=>', doc.data());
     });
-    const docRef = this.firestore
-      .collection('administration-service')
-      .doc('alovelace');
-
-    await docRef.set({
-      first: 'Ada',
-      last: 'Lovelace',
-      born: 1815,
-    });
 
     return 'Hello! I am the administration microservice.';
   }
