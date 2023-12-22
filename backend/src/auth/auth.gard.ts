@@ -14,6 +14,21 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
+    // Allow access in development environment
+    const isDev = process.env.NODE_ENV === 'development';
+    if (isDev) {
+      request['user'] = {
+        name: 'Dev User',
+        email: 'nk.nk.1@icloud.com',
+        email_verified: false,
+        firebase: {
+          tenant: 'free',
+        },
+        uid: 'hDMhi5pTkLaKhV28Hs8ykMz5nU72',
+      };
+      return true;
+    }
+
     // check if token exists
     if (!token) {
       throw new UnauthorizedException('No token provided');
@@ -23,6 +38,7 @@ export class AuthGuard implements CanActivate {
     let decodedToken: DecodedIdToken;
     try {
       decodedToken = await admin.auth().verifyIdToken(token);
+      console.log(decodedToken);
     } catch (error) {
       throw new UnauthorizedException(error); //'Error while verifying token');
     }
