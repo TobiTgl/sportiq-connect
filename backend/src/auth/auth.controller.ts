@@ -38,4 +38,10 @@ export class AuthController {
 
     return this.service.setTenant(userId, tenantName);
   }
+
+  @Get('gettenant')
+  getTenant(@Req() req): Promise<String> {
+    const user: DecodedIdToken = req.user;
+    return user?.tenant;
+  }
 }
