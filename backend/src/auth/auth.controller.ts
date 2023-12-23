@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
@@ -16,5 +24,18 @@ export class AuthController {
     const userId = user?.uid;
     const tenantId = user?.firebase?.tenant;
     return this.service.hello(userId, tenantId);
+  }
+
+  @Post('settenant')
+  setTenant(@Req() req): Promise<void> {
+    const user: DecodedIdToken = req.user;
+    const userId = user?.uid;
+    const tenantName = req.body.tenant;
+
+    if (!tenantName) {
+      throw new BadRequestException('No tenant provided');
+    }
+
+    return this.service.setTenant(userId, tenantName);
   }
 }
