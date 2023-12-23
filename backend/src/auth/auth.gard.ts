@@ -19,12 +19,9 @@ export class AuthGuard implements CanActivate {
     if (isDev) {
       request['user'] = {
         name: 'Dev User',
-        email: 'nk.nk.1@icloud.com',
-        email_verified: false,
-        firebase: {
-          tenant: 'free',
-        },
-        uid: 'hDMhi5pTkLaKhV28Hs8ykMz5nU72',
+        tenant: 'Free',
+        email: 'max@mustermann.de',
+        uid: 'XTLQBP6os6S5OBiQZrK6ExFnGzz2',
       };
       return true;
     }
@@ -38,14 +35,13 @@ export class AuthGuard implements CanActivate {
     let decodedToken: DecodedIdToken;
     try {
       decodedToken = await admin.auth().verifyIdToken(token);
-      console.log(decodedToken);
     } catch (error) {
-      throw new UnauthorizedException(error); //'Error while verifying token');
+      throw new UnauthorizedException(error);
     }
 
     request['user'] = decodedToken;
-    if (!decodedToken.firebase.tenant) {
-      request['user']['firebase']['tenant'] = 'free';
+    if (!decodedToken.tenant) {
+      request['user']['tenant'] = 'Free';
     }
     return true;
   }
