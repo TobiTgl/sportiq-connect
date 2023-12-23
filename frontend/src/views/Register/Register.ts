@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import router from "@/router";
 import { ref } from "vue";
+import axios from "axios";
 
 export default {
   name: "Register",
@@ -69,6 +70,9 @@ export default {
             displayName: name.value,
           })
             .then(() => {
+              axios.post(import.meta.env.VITE_BACKEND_URL + "/auth/settenant", {
+                tenant: "Free",
+              });
               router.push({ name: "Home" });
               loading.value = false;
             })
