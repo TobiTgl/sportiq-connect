@@ -61,8 +61,8 @@ export class AdministrationService {
       ),
     );
     this.authData = dataAuth;
-    console.log(this.authData.data);
 
+    //todo: getUserId & token to user in db
     const docRef = this.firestore
       .collection('administration-service')
       .doc('userid(123)');
@@ -70,6 +70,7 @@ export class AdministrationService {
     await docRef.set({
       username: 'Ade',
       stravaAccessToken: this.authData.data.access_token,
+      accessTokenExpiresAt: this.authData.data.expires_at,
       stravaRefreshToken: this.authData.data.refresh_token,
     });
     return 'You are now connected to Strava! You can close this window.';
@@ -77,8 +78,24 @@ export class AdministrationService {
 
   //Refreshes the access token (should be called before every request to Strava)
   public async getRefreshToken(): Promise<String> {
-    const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&refresh_token=${process.env.REFRESH_TOKEN}&grant_type=refresh_token`;
-    let expires_at = 1702047464;
+    //todo: get userId & check if token is expired (maybe also token from local storage??)
+    const userId = 'userid(123)';
+    const userRef = this.firestore
+      .collection('administration-service')
+      .doc(userId);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log('No such document!');
+    } else {
+      console.log('Document data:', doc.data());
+    }
+    const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${
+      process.env.CLIENT_ID
+    }&client_secret=${process.env.CLIENT_SECRET}&refresh_token=${
+      doc.data().refresh_token
+    }&grant_type=refresh_token`;
+    let expires_at = doc.data().accessTokenExpiresAt;
+    console.log(expires_at);
 
     if (expires_at < Date.now() / 1000) {
       let refreshToken = await firstValueFrom(
