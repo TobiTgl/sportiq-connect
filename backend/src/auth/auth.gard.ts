@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         name: 'Dev User',
         tenant: 'Free',
         email: 'max@mustermann.de',
-        uid: 'XTLQBP6os6S5OBiQZrK6ExFnGzz2',
+        uid: 'ufDIBgds93WAN4EdXWFDbAWt9Es1',
       };
       return true;
     }

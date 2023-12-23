@@ -70,11 +70,19 @@ export default {
             displayName: name.value,
           })
             .then(() => {
-              axios.post(import.meta.env.VITE_BACKEND_URL + "/auth/settenant", {
-                tenant: "Free",
+              userCredential.user.getIdToken().then((token) => {
+                axios.post(
+                  import.meta.env.VITE_BACKEND_URL + "/auth/settenant",
+                  {
+                    tenant: "Free",
+                  },
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                );
+                router.push({ name: "Home" });
+                loading.value = false;
               });
-              router.push({ name: "Home" });
-              loading.value = false;
             })
             .catch((error) => {
               console.log(error.code);
