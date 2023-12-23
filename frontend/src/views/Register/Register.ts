@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import router from "@/router";
 import { ref } from "vue";
+import axios from "axios";
 
 export default {
   name: "Register",
@@ -69,8 +70,19 @@ export default {
             displayName: name.value,
           })
             .then(() => {
-              router.push({ name: "Home" });
-              loading.value = false;
+              userCredential.user.getIdToken().then((token) => {
+                axios.post(
+                  import.meta.env.VITE_BACKEND_URL + "/auth/settenant",
+                  {
+                    tenant: "Free",
+                  },
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                );
+                router.push({ name: "Home" });
+                loading.value = false;
+              });
             })
             .catch((error) => {
               console.log(error.code);

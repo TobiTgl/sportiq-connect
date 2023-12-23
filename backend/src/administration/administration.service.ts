@@ -78,7 +78,7 @@ export class AdministrationService {
     return 'Token refreshed';
   }
 
-  public async hello(): Promise<String> {
-    return 'Hello! I am the administration microservice.';
+  public async hello(userId: string, tenantId: String): Promise<String> {
+    return `Hello! I am the analysis administration.\nYour userId is: ${userId}\nYour tenantId is: ${tenantId}\n`;
   }
 }
