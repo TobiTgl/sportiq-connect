@@ -1,5 +1,14 @@
 <v-container fluid class="profile">
-  <h1>Welcome {{ user.displayName }}!</h1>
-  <div>Email: {{ user.email }}</div>
-  <v-btn class="mt-5" @click="stravaAuth">Connect to Strava</v-btn>
+  <h1>Profile</h1>
+
+  <!-- Personal info  -->
+  <personal-info />
+  <br />
+
+  <!-- Strava connection -->
+  <strava-connection />
+  <br />
+
+  <!-- Payments & subscriptions -->
+  <payments-subscriptions />
 </v-container>
