@@ -37,4 +37,8 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+
+# Prevent commit of google secretes
+*service-credentials.json
+
 firestore-admin-key.json
