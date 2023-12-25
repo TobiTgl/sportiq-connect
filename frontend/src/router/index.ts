@@ -48,7 +48,6 @@ const routes = [
         path: "profile",
         name: "Profile",
         component: Profile,
-        meta: { requiresNoAuth: true },
       },
     ],
   },
@@ -84,6 +83,8 @@ router.beforeEach(async (to, from, next) => {
     next();
   } else if (!isAuth) {
     next("/login");
+  } else {
+    next();
   }
 });
 

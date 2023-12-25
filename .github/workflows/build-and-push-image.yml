@@ -77,11 +77,11 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             cd ./backend
             docker build -t cloud-project-backend .
-            docker tag cloud-project-frontend "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${{ github.event.inputs.version }}-${{ github.event.inputs.env }}"
+            docker tag cloud-project-backend "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${{ github.event.inputs.version }}-${{ github.event.inputs.env }}"
             docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${{ github.event.inputs.version }}-${{ github.event.inputs.env }}"
           elif [[ "${{ github.event_name }}" == "push" ]]; then
             cd ./backend
             docker build -t cloud-project-backend .
-            docker tag cloud-project-frontend "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
+            docker tag cloud-project-backend "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
             docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
           fi

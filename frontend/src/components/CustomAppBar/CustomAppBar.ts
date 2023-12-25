@@ -11,7 +11,7 @@ export default {
       features: [
         {
           title: "Home",
-          route: "Home",
+          route: "Startpage",
           icon: "mdi-home",
         },
       ],
