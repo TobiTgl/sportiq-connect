@@ -51,7 +51,7 @@ export default {
               loading.value = false;
               alertType.value = "success";
               alertMessage.value =
-                "Verbindung zu Strava wurde hergestellt! Sie werden in 3 Sekunden weitergeleitet...";
+                "Ihr Account wurde mit Strava Verbunden! Sie werden in 3 Sekunden weitergeleitet...";
               setTimeout(() => {
                 router.push("/profile");
               }, 3000);

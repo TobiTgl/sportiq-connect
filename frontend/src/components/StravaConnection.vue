@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { getRedirectUrl } from "@/helpers/helpers";
+import { getRedirectUrl, getStravaAuthUrl } from "@/helpers/helpers";
 
 const stravaId = ref<string | null>(null);
 const overlay = ref(false);
@@ -65,8 +65,7 @@ const overlay = ref(false);
 const client_id: string = import.meta.env.VITE_CLIENT_ID;
 
 const stravaAuth = () => {
-  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${client_id}&redirect_uri=${getRedirectUrl()}&response_type=code&scope=activity%3Aread_all&approval_prompt=force`;
-  window.location.href = stravaAuthUrl;
+  window.location.href = getStravaAuthUrl();
 };
 
 const disconnectStrava = () => {
