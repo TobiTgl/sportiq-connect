@@ -56,56 +56,17 @@
 </template>
 
 <script lang="ts" setup>
-import { getAuth } from "firebase/auth";
-import { ref, onBeforeMount } from "vue";
-import { useRoute } from "vue-router";
-import axios from "axios";
+import { ref } from "vue";
+import { getRedirectUrl } from "@/helpers/helpers";
 
-const auth = getAuth();
-const user = auth.currentUser;
 const stravaId = ref<string | null>(null);
 const overlay = ref(false);
-const route = useRoute();
-
-const subscription = ref("Free");
-const loading = ref(true);
 
 const client_id: string = import.meta.env.VITE_CLIENT_ID;
-const redirect_uri: string = import.meta.env.VITE_REDIRECT_URI;
-
-onBeforeMount(() => {
-  const params = route.query;
-  if (Object.keys(params).length > 0) {
-    console.log(params);
-    user
-      ?.getIdToken()
-      .then((token) => {
-        console.log(token);
-        console.log(params.code);
-        axios
-          .get(
-            `http://localhost:4000/administration/stravaAuth?code=${params.code}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            console.log(res.data);
-            subscription.value = res.data;
-            loading.value = false;
-            window.close();
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        loading.value = false;
-      });
-  }
-});
 
 const stravaAuth = () => {
-  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&scope=activity%3Aread_all&approval_prompt=force`;
-  window.open(stravaAuthUrl, "_blank");
+  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${client_id}&redirect_uri=${getRedirectUrl()}&response_type=code&scope=activity%3Aread_all&approval_prompt=force`;
+  window.location.href = stravaAuthUrl;
 };
 
 const disconnectStrava = () => {
