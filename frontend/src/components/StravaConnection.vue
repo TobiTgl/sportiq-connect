@@ -55,7 +55,12 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount } from "vue";
 import { getStravaAuthUrl } from "@/helpers/helpers";
+import { getAuth } from "firebase/auth";
+import axios from "axios";
+import { getBackendUrl } from "@/helpers/helpers";
 
+const auth = getAuth();
+const user = auth.currentUser;
 const overlay = ref(false);
 const stravaAthleteId = ref<string | null>(null);
 
@@ -70,6 +75,19 @@ const stravaAuth = () => {
 };
 
 const disconnectStrava = () => {
+  user?.getIdToken().then((token) => {
+    axios
+      .get(`${getBackendUrl()}/administration/disconnectStrava`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        // Strava auth data saved successfully
+      })
+      .catch((error) => {
+        // error handling when Strava auth data could not be saved
+        console.log(error);
+      });
+  });
   localStorage.removeItem("athleteId");
   stravaAthleteId.value = null;
   overlay.value = false;

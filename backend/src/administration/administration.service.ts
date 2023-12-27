@@ -9,6 +9,7 @@ import {
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Firestore } from 'firebase-admin/firestore';
+import { access } from 'fs';
 @Injectable()
 export class AdministrationService {
   constructor(
@@ -37,8 +38,46 @@ export class AdministrationService {
           }),
         ),
     );
-    console.log(dataAthlete.data);
     return dataAthlete.data;
+  }
+
+  //Disconnects the user from Strava & deletes the user + Strava tokens from administration database
+  async disconnectStrava(req: any): Promise<String> {
+    const userRef = this.firestore
+      .collection('administration-service')
+      .doc(req.user.sub);
+
+    const user = await userRef.get();
+    if (!user.exists) {
+      this.logger.error('User does not exist!');
+      throw new HttpException(
+        'User does not exist!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const deauthUrl = `https://www.strava.com/oauth/deauthorize?access_token=${
+      user.data().stravaAccessToken
+    }`;
+
+    this.httpService.post(deauthUrl).pipe(
+      catchError((error: AxiosError) => {
+        this.logger.error('status' + error.response.status);
+        this.logger.error(error.response.data);
+        throw new HttpException(
+          'Deauthorization with Strava failed',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }),
+    );
+    await userRef.delete().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        'Deleting User from Administration DB failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+    return 'Strava disconnected';
   }
 
   //Authenticates the user with Strava (receives access token & refresh token)
@@ -51,6 +90,7 @@ export class AdministrationService {
     const authData = await firstValueFrom(
       this.httpService.post(authUrl).pipe(
         catchError((error: AxiosError) => {
+          this.logger.error('status' + error.response.status);
           this.logger.error(error.response.data);
           throw new HttpException(
             'Auth failed, please try again',
@@ -60,43 +100,50 @@ export class AdministrationService {
       ),
     );
 
-    const docRef = this.firestore
+    const userRef = this.firestore
       .collection('administration-service')
       .doc(req.user.sub);
 
-    await docRef.set({
-      athleteId: authData.data.athlete.id,
-      stravaAccessToken: authData.data.access_token,
-      accessTokenExpiresAt: authData.data.expires_at,
-      stravaRefreshToken: authData.data.refresh_token,
-    });
+    await userRef
+      .set({
+        athleteId: authData.data.athlete.id,
+        stravaAccessToken: authData.data.access_token,
+        accessTokenExpiresAt: authData.data.expires_at,
+        stravaRefreshToken: authData.data.refresh_token,
+      })
+      .catch((error) => {
+        this.logger.error(error);
+        throw new HttpException(
+          'Presisting token failed',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
     return authData.data.athlete.id;
   }
 
   //Refreshes the access token (should be called before every request to Strava)
   public async getRefreshToken(req: any): Promise<String> {
-    const userId = req.user.sub;
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(userId);
+      .doc(req.user.sub);
+
     const user = await userRef.get();
     if (!user.exists) {
-      console.log('User does not exist!');
-    } else {
-      console.log('Document data:', user.data());
+      this.logger.error('User does not exist!');
+      throw new HttpException('User does not exist!', HttpStatus.NOT_FOUND);
     }
+
     const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${
       process.env.CLIENT_ID
     }&client_secret=${process.env.CLIENT_SECRET}&refresh_token=${
       user.data().refresh_token
     }&grant_type=refresh_token`;
-    let expires_at = user.data().accessTokenExpiresAt;
-    console.log(expires_at);
 
-    if (expires_at < Date.now() / 1000) {
+    if (user.data().accessTokenExpiresAt < Date.now() / 1000) {
       let refreshToken = await firstValueFrom(
         this.httpService.post(stravaRefreshUrl).pipe(
           catchError((error: AxiosError) => {
+            this.logger.error('status' + error.response.status);
             this.logger.error(error.response.data);
             throw new HttpException(
               'Auth failed, please try again',
@@ -106,7 +153,18 @@ export class AdministrationService {
         ),
       );
 
-      console.log(refreshToken);
+      await userRef
+        .update({
+          stravaAccessToken: refreshToken.data.access_token,
+          accessTokenExpiresAt: refreshToken.data.expires_at,
+        })
+        .catch((error) => {
+          this.logger.error(error);
+          throw new HttpException(
+            'Refreshing token failed',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        });
     }
     return 'Token refreshed';
   }

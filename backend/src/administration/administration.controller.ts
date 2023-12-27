@@ -30,6 +30,11 @@ export class AdministrationController {
     return this.service.athleteData();
   }
 
+  @Get('disconnectStrava')
+  disconnectStrava(@Req() req): Promise<String> {
+    return this.service.disconnectStrava(req);
+  }
+
   @Get('getRefreshToken')
   getRefreshToken(@Req() req): Promise<String> {
     // Handle the Strava refresh token
