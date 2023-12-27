@@ -4,6 +4,8 @@ import { useDisplay } from "vuetify";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import router from "@/router";
 import { ref } from "vue";
+import axios from "axios";
+import { getBackendUrl } from "@/helpers/helpers";
 
 export default {
   name: "Login",
@@ -38,7 +40,11 @@ export default {
     const handleLogin = async () => {
       errorMessage.value = "";
       loading.value = true;
-      await signInWithEmailAndPassword(auth, email.value, password.value)
+      const user = await signInWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      )
         .then(() => {
           router.push({ name: "Home" });
           loading.value = false;
@@ -68,6 +74,19 @@ export default {
           }
           loading.value = false;
         });
+
+      auth.currentUser?.getIdToken().then((token) => {
+        axios
+          .get(`${getBackendUrl()}/administration/getStravaId`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((res) => {
+            localStorage.setItem("athleteId", res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
     };
 
     return {

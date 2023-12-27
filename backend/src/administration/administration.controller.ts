@@ -40,4 +40,10 @@ export class AdministrationController {
     // Handle the Strava refresh token
     return this.service.getRefreshToken(req);
   }
+
+  @Get('getStravaId')
+  getStravaId(@Req() req): Promise<String> {
+    //Get the Strava athlete id
+    return this.service.getStravaId(req);
+  }
 }

@@ -9,7 +9,6 @@ import {
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Firestore } from 'firebase-admin/firestore';
-import { access } from 'fs';
 @Injectable()
 export class AdministrationService {
   constructor(
@@ -47,14 +46,13 @@ export class AdministrationService {
       .collection('administration-service')
       .doc(req.user.sub);
 
-    const user = await userRef.get();
-    if (!user.exists) {
-      this.logger.error('User does not exist!');
+    const user = await userRef.get().catch((error) => {
+      this.logger.error(error);
       throw new HttpException(
-        'User does not exist!',
+        `Couldn't get user`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    }
+    });
 
     const deauthUrl = `https://www.strava.com/oauth/deauthorize?access_token=${
       user.data().stravaAccessToken
@@ -127,11 +125,13 @@ export class AdministrationService {
       .collection('administration-service')
       .doc(req.user.sub);
 
-    const user = await userRef.get();
-    if (!user.exists) {
-      this.logger.error('User does not exist!');
-      throw new HttpException('User does not exist!', HttpStatus.NOT_FOUND);
-    }
+    const user = await userRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get user`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
 
     const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${
       process.env.CLIENT_ID
@@ -169,17 +169,22 @@ export class AdministrationService {
     return 'Token refreshed';
   }
 
-  public async hello(userId: string, tenantId: String): Promise<String> {
-    const collection = this.firestore.collection('administration-service');
-    console.log(collection);
-
-    const snapshot = await this.firestore
+  async getStravaId(req: any){
+    const userRef = this.firestore
       .collection('administration-service')
-      .get();
-    snapshot.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data());
-    });
+      .doc(req.user.sub);
 
+    const user = await userRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get user`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+    return user.data().athleteId;
+  }
+
+  public async hello(userId: string, tenantId: String): Promise<String> {
     return `Hello! I am the analysis administration.\nYour userId is: ${userId}\nYour tenantId is: ${tenantId}\n`;
   }
 }
