@@ -65,11 +65,12 @@ export class AdministrationService {
       .doc(req.user.sub);
 
     await docRef.set({
+      athleteId: authData.data.athlete.id,
       stravaAccessToken: authData.data.access_token,
       accessTokenExpiresAt: authData.data.expires_at,
       stravaRefreshToken: authData.data.refresh_token,
     });
-    return 'You are now connected to Strava! You can close this window.';
+    return authData.data.athlete.id;
   }
 
   //Refreshes the access token (should be called before every request to Strava)

@@ -48,6 +48,7 @@ export default {
             })
             .then((res) => {
               // Strava auth data saved successfully
+              localStorage.setItem("athleteId", res.data);
               loading.value = false;
               alertType.value = "success";
               alertMessage.value =

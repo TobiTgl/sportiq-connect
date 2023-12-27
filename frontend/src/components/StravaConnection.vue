@@ -3,14 +3,11 @@
     <v-card-title>Strava connection</v-card-title>
     <v-card-subtitle> Info about you and your preferences </v-card-subtitle>
     <v-card-text>
-      <v-text-field
-        v-if="stravaId !== null"
-        v-model="stravaId"
-        readonly
-        variant="plain"
-      />
+      <v-text-field v-if="stravaAthleteId !== null" readonly variant="plain"
+        >Your Strava athleteId: {{ stravaAthleteId }}
+      </v-text-field>
       <v-btn
-        v-if="stravaId === null"
+        v-if="stravaAthleteId === null"
         color="orange"
         @click="stravaAuth"
         variant="outlined"
@@ -56,20 +53,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { getRedirectUrl, getStravaAuthUrl } from "@/helpers/helpers";
+import { ref, onBeforeMount } from "vue";
+import { getStravaAuthUrl } from "@/helpers/helpers";
 
-const stravaId = ref<string | null>(null);
 const overlay = ref(false);
+const stravaAthleteId = ref<string | null>(null);
 
 const client_id: string = import.meta.env.VITE_CLIENT_ID;
+
+onBeforeMount(() => {
+  stravaAthleteId.value = localStorage.getItem("athleteId");
+});
 
 const stravaAuth = () => {
   window.location.href = getStravaAuthUrl();
 };
 
 const disconnectStrava = () => {
-  // TODO: delete connection in database
-  stravaId.value = null;
+  localStorage.removeItem("athleteId");
+  stravaAthleteId.value = null;
+  overlay.value = false;
 };
 </script>
