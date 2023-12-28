@@ -36,9 +36,9 @@ export default {
     const handleLogout = async () => {
       await signOut(auth)
         .then(() => {
+          localStorage.removeItem("athleteId");
           router.push("/");
           location.reload();
-          localStorage.removeItem("atheteId");
         })
         .catch((error) => {
           console.log(error.code);
