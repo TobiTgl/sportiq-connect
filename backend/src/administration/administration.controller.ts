@@ -25,9 +25,9 @@ export class AdministrationController {
   }
 
   @Get('athleteData')
-  athleteData(): Promise<String> {
+  athleteData(@Req() req): Promise<String> {
     // Handle the Strava authorization
-    return this.service.athleteData();
+    return this.service.athleteData(req);
   }
 
   @Get('disconnectStrava')
@@ -38,7 +38,7 @@ export class AdministrationController {
   @Get('getRefreshToken')
   getRefreshToken(@Req() req): Promise<String> {
     // Handle the Strava refresh token
-    return this.service.getRefreshToken(req);
+    return this.service.refreshAccessToken(req);
   }
 
   @Get('getStravaId')

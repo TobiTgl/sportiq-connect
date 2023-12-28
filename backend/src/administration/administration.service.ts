@@ -19,14 +19,21 @@ export class AdministrationService {
   private readonly logger = new Logger(AdministrationService.name);
 
   //Fetch athlete data from Strava with accesstoken currently from env file
-  public async athleteData(): Promise<String> {
+  public async athleteData(req): Promise<String> {
+    await this.refreshAccessToken(req);
+    const userRef = this.firestore
+      .collection('administration-service')
+      .doc(req.user.sub);
+
+    const user = await this.getUser(userRef);
+
     const stravaAthleteUrl = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
     const dataAthlete = await firstValueFrom(
       this.httpService
         .get(stravaAthleteUrl, {
           headers: {
             accept: `application/json`,
-            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+            Authorization: `Bearer ${user.data().stravaAccessToken}`,
           },
         })
         .pipe(
@@ -46,13 +53,7 @@ export class AdministrationService {
       .collection('administration-service')
       .doc(req.user.sub);
 
-    const user = await userRef.get().catch((error) => {
-      this.logger.error(error);
-      throw new HttpException(
-        `Couldn't get user`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    });
+    const user = await this.getUser(userRef);
 
     const deauthUrl = `https://www.strava.com/oauth/deauthorize?access_token=${
       user.data().stravaAccessToken
@@ -120,18 +121,12 @@ export class AdministrationService {
   }
 
   //Refreshes the access token (should be called before every request to Strava)
-  public async getRefreshToken(req: any): Promise<String> {
+  public async refreshAccessToken(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
       .doc(req.user.sub);
 
-    const user = await userRef.get().catch((error) => {
-      this.logger.error(error);
-      throw new HttpException(
-        `Couldn't get user`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    });
+    const user = await this.getUser(userRef);
 
     const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${
       process.env.CLIENT_ID
@@ -174,13 +169,8 @@ export class AdministrationService {
       .collection('administration-service')
       .doc(req.user.sub);
 
-    const user = await userRef.get().catch((error) => {
-      this.logger.error(error);
-      throw new HttpException(
-        `Couldn't get user`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    });
+    const user = await this.getUser(userRef);
+
     if (user.data() !== undefined) {
       return user.data().athleteId;
     } else {
@@ -189,6 +179,16 @@ export class AdministrationService {
         HttpStatus.NOT_FOUND,
       );
     }
+  }
+
+  private async getUser(userRef: any) {
+    return await userRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get user`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
   }
 
   public async hello(userId: string, tenantId: String): Promise<String> {
