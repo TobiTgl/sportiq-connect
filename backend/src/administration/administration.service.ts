@@ -169,7 +169,7 @@ export class AdministrationService {
     return 'Token refreshed';
   }
 
-  async getStravaId(req: any){
+  async getStravaId(req: any) {
     const userRef = this.firestore
       .collection('administration-service')
       .doc(req.user.sub);
@@ -181,7 +181,14 @@ export class AdministrationService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     });
-    return user.data().athleteId;
+    if (user.data() !== undefined) {
+      return user.data().athleteId;
+    } else {
+      throw new HttpException(
+        `User is not connected to Strava`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   public async hello(userId: string, tenantId: String): Promise<String> {

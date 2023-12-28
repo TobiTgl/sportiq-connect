@@ -82,9 +82,6 @@ export default {
           })
           .then((res) => {
             localStorage.setItem("athleteId", res.data);
-          })
-          .catch((error) => {
-            console.log(error);
           });
       });
     };
