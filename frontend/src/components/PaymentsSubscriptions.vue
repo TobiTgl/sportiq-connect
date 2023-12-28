@@ -36,6 +36,7 @@
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
+import { getBackendUrl } from "@/helpers/helpers";
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -51,7 +52,7 @@ user
   ?.getIdToken()
   .then((token) => {
     axios
-      .get(import.meta.env.VITE_BACKEND_URL + "/auth/gettenant", {
+      .get(getBackendUrl() + "/auth/gettenant", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -71,7 +72,7 @@ const setTenant = () => {
     .then((token) => {
       axios
         .post(
-          import.meta.env.VITE_BACKEND_URL + "/auth/settenant",
+          getBackendUrl() + "/auth/settenant",
           {
             tenant: subscription.value,
           },

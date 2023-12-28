@@ -7,6 +7,7 @@ import Home from "@/views/Home/index.vue";
 import Login from "@/views/Login/index.vue";
 import Profile from "@/views/Profile/index.vue";
 import Register from "@/views/Register/index.vue";
+import Redirect from "@/views/StravaRedirect/index.vue";
 import { getUserState } from "@/store/authStore";
 
 const routes = [
@@ -48,6 +49,11 @@ const routes = [
         path: "profile",
         name: "Profile",
         component: Profile,
+      },
+      {
+        path: "redirect",
+        name: "Redirect",
+        component: Redirect,
       },
     ],
   },
