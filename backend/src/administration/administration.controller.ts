@@ -19,20 +19,31 @@ export class AdministrationController {
   }
 
   @Get('stravaAuth')
-  stravaAuth(@Query() queryParams: any): Promise<String> {
+  stravaAuth(@Query() queryParams: any, @Req() req): Promise<String> {
     // Handle the Strava authorization
-    return this.service.stravaAuth(queryParams);
+    return this.service.stravaAuth(queryParams, req);
   }
 
   @Get('athleteData')
-  athleteData(): Promise<String> {
+  athleteData(@Req() req): Promise<String> {
     // Handle the Strava authorization
-    return this.service.athleteData();
+    return this.service.athleteData(req);
+  }
+
+  @Get('disconnectStrava')
+  disconnectStrava(@Req() req): Promise<String> {
+    return this.service.disconnectStrava(req);
   }
 
   @Get('getRefreshToken')
-  getRefreshToken(): Promise<String> {
+  getRefreshToken(@Req() req): Promise<String> {
     // Handle the Strava refresh token
-    return this.service.getRefreshToken();
+    return this.service.refreshAccessToken(req);
+  }
+
+  @Get('getStravaId')
+  getStravaId(@Req() req): Promise<String> {
+    //Get the Strava athlete id
+    return this.service.getStravaId(req);
   }
 }

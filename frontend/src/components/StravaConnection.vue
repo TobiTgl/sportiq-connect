@@ -3,15 +3,12 @@
     <v-card-title>Strava connection</v-card-title>
     <v-card-subtitle> Info about you and your preferences </v-card-subtitle>
     <v-card-text>
-      <v-text-field
-        v-if="stravaId !== null"
-        v-model="stravaId"
-        readonly
-        variant="plain"
-      />
+      <v-text-field v-if="stravaAthleteId !== null" readonly variant="plain"
+        >Your Strava athleteId: {{ stravaAthleteId }}
+      </v-text-field>
       <v-btn
-        v-if="stravaId === null"
-        color="primary"
+        v-if="stravaAthleteId === null"
+        color="orange"
         @click="stravaAuth"
         variant="outlined"
       >
@@ -56,24 +53,43 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onBeforeMount } from "vue";
+import { getStravaAuthUrl } from "@/helpers/helpers";
 import { getAuth } from "firebase/auth";
-import { ref } from "vue";
+import axios from "axios";
+import { getBackendUrl } from "@/helpers/helpers";
 
 const auth = getAuth();
 const user = auth.currentUser;
-const stravaId = ref<string | null>(null);
 const overlay = ref(false);
+const stravaAthleteId = ref<string | null>(null);
 
 const client_id: string = import.meta.env.VITE_CLIENT_ID;
-const redirect_uri: string = import.meta.env.VITE_REDIRECT_URI;
+
+onBeforeMount(() => {
+  stravaAthleteId.value = localStorage.getItem("athleteId");
+});
 
 const stravaAuth = () => {
-  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&scope=activity%3Aread_all&approval_prompt=force`;
-  window.open(stravaAuthUrl, "PopupWindow", "width=600,height=800");
+  window.location.href = getStravaAuthUrl();
 };
 
 const disconnectStrava = () => {
-  // TODO: delete connection in database
-  stravaId.value = null;
+  user?.getIdToken().then((token) => {
+    axios
+      .get(`${getBackendUrl()}/administration/disconnectStrava`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        // Strava auth data saved successfully
+      })
+      .catch((error) => {
+        // error handling when Strava auth data could not be saved
+        console.log(error);
+      });
+  });
+  localStorage.removeItem("athleteId");
+  stravaAthleteId.value = null;
+  overlay.value = false;
 };
 </script>

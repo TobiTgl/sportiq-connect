@@ -6,6 +6,7 @@ import { AdministrationModule } from 'src/administration/administration.module';
 import { AnalysisModule } from 'src/analysis/analysis.module';
 import { ReportModule } from 'src/report/report.module';
 import { ConfigModule } from '@nestjs/config';
+import { FirestoreModule } from 'src/firestore/firestore.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     AdministrationModule,
     AnalysisModule,
     ReportModule,
+    FirestoreModule,
     ConfigModule.forRoot(),
   ],
   controllers: [GatewayController],
