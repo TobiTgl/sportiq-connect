@@ -38,6 +38,7 @@ export default {
         .then(() => {
           router.push("/");
           location.reload();
+          localStorage.removeItem("atheteId");
         })
         .catch((error) => {
           console.log(error.code);
