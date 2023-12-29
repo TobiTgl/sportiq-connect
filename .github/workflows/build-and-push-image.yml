@@ -98,16 +98,16 @@ jobs:
             docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
           fi
 
-      - name: Create Kubernetes Secret
-        env:
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-        run: |
-          cd ./kubernetes
-          kubectl create secret generic backend-secrets \
-            --from-literal=CLIENT_ID=MTE3MjMy \
-            --from-literal=CLIENT_SECRET=${CLIENT_SECRET} \
-            --from-literal=REFRESH_TOKEN=${REFRESH_TOKEN}
+#      - name: Create Kubernetes Secret
+#        env:
+#          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+#          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+#        run: |
+#          cd ./kubernetes
+#          kubectl create secret generic backend-secrets \
+#            --from-literal=CLIENT_ID=MTE3MjMy \
+#            --from-literal=CLIENT_SECRET=${CLIENT_SECRET} \
+#            --from-literal=REFRESH_TOKEN=${REFRESH_TOKEN}
       - name: Deploy to Kubernetes
         run: |
           cd ./kubernetes
