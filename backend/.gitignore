@@ -40,5 +40,3 @@ lerna-debug.log*
 
 # Prevent commit of google secretes
 *service-credentials.json
-
-firestore-admin-key.json
