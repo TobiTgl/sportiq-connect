@@ -97,7 +97,7 @@ jobs:
 
       - name: Configure kubectl
         run: |
-          gcloud components install gke-gcloud-auth-plugin
+          sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
           gcloud container clusters get-credentials quixotic-market-402317-gke --region=us-central1-c
           kubectl config use-context quixotic-market-402317-gke
 
