@@ -13,7 +13,7 @@ kubectl config use-context docker-desktop/quixotic-market-402317-gke (je nachdem
 
 kubectl apply -f ingress-controller.yaml
 kubectl apply -f ingress.yaml
-kubectl apply -f backend-secret.yaml
+kubectl apply -f backend-secret.yaml only local
 kubectl apply -f backend-deployment.yaml
 kubectl apply -f backend-service.yaml
 kubectl apply -f frontend-deployment.yaml
@@ -23,6 +23,8 @@ kubectl apply -f frontend-service.yaml
 
 :'
 kubectl get service ingress-nginx-controller --namespace=ingress-nginx
+
+use local-secrets,yaml for local development
 
 when using prod envrionment:
 change Strava callback url to ingress ip 
