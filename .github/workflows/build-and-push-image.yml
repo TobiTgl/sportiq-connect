@@ -57,6 +57,12 @@ jobs:
           password: '${{ steps.auth.outputs.access_token }}'
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
+      - name: Setup service account key
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" | base64 --decode > ./backend/src/service-credentials.json
+
       - name: Build and Push frontend container
         run: |-
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -92,9 +98,6 @@ jobs:
       - name: Configure kubectl
         run: |
           gcloud container clusters get-credentials quixotic-market-402317-gke --region=us-central1
-          
-      - name: Set kubectl context
-        run: |          
           kubectl config use-context quixotic-market-402317-gke
 
       - name: Create Kubernetes Secret
@@ -102,17 +105,19 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: |
+          cd ./kubernetes
           kubectl create secret generic backend-secrets \
             --from-literal=CLIENT_ID=MTE3MjMy \
             --from-literal=CLIENT_SECRET=${CLIENT_SECRET} \
             --from-literal=REFRESH_TOKEN=${REFRESH_TOKEN}
       - name: Deploy to Kubernetes
         run: |
-              kubectl apply -f ingress-controller.yaml
-              kubectl apply -f ingress.yaml
-              kubectl apply -f backend-deployment.yaml
-              kubectl apply -f backend-service.yaml
-              kubectl apply -f frontend-deployment.yaml
-              kubectl apply -f frontend-service.yaml
-              kubectl get all
+          cd ./kubernetes
+          kubectl apply -f ingress-controller.yaml
+          kubectl apply -f ingress.yaml
+          kubectl apply -f backend-deployment.yaml
+          kubectl apply -f backend-service.yaml
+          kubectl apply -f frontend-deployment.yaml
+          kubectl apply -f frontend-service.yaml
+          kubectl get all
          
