@@ -47,6 +47,12 @@ jobs:
         with:
           token_format: 'access_token'
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+      
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: 'quixotic-market-402317-gke'
+          location: 'us-central1-c'
 
       # Authenticate Docker to Google Cloud Artifact Registry
       - name: Docker Auth
@@ -91,13 +97,6 @@ jobs:
             docker tag cloud-project-backend "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
             docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${GITHUB_REF#refs/tags/}"
           fi
-
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v1
-
-      - name: Configure kubectl
-        run: |
-          gcloud container clusters get-credentials quixotic-market-402317-gke --region=us-central1-c
 
       - name: Create Kubernetes Secret
         env:
