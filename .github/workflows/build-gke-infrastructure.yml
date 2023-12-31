@@ -33,11 +33,7 @@ jobs:
         name: Terraform apply/destroy
         run: |
           cd ./terraform
-          if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
-              terraform apply -auto-approve
-          elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
-              terraform destroy -auto-approve
-          fi
+          ls
 
       - run: echo ${{ steps.run.outputs.stdout }}
       - run: echo ${{ steps.run.outputs.stderr }}
