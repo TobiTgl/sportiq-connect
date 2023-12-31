@@ -20,6 +20,7 @@ jobs:
         - name: HashiCorp - Setup Terraform
           uses: hashicorp/setup-terraform@v3.0.0
         - run: |- 
+            cd ./terraform
             terraform init
                
             if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
