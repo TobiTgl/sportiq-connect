@@ -1,4 +1,4 @@
-name: Build gke Infrastructure
+name: Build/Destroy gke Infrastructure
 
 # trigger manually
 on:
