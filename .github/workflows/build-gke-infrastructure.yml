@@ -1,0 +1,29 @@
+name: Build gke Infrastructure
+
+# trigger manually
+on:
+  workflow_dispatch:
+    inputs:
+      tf:
+        description: 'Bulild/Destroy'
+        required: true
+        default: 'build' 
+        type: choice
+        options:
+          - build
+          - destroy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+        - name: HashiCorp - Setup Terraform
+          uses: hashicorp/setup-terraform@v3.0.0
+        - run: |- 
+            terraform init
+               
+            if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
+                terraform apply -auto-approve
+            elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
+                terraform destroy -auto-approve
+            fi
