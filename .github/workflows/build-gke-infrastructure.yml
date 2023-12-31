@@ -24,11 +24,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3.0.0
 
       - id: init
+        name: Terraform init
         run: |
           cd ./terraform
           terraform init
 
       - id: run
+        name: Terraform apply/destroy
         run: |
           cd ./terraform
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
