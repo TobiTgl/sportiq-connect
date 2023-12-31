@@ -28,14 +28,20 @@ jobs:
         run: |
           cd ./terraform
           terraform init
-          ls
+        env:
+          TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
+          TF_VAR_region: ${{ secrets.REGION }}
+          TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+
 
       - id: run
         name: Terraform apply/destroy
         run: |
           cd ./terraform
           terraform plan -no-color
-
-      - run: echo ${{ steps.run.outputs.stdout }}
-      - run: echo ${{ steps.run.outputs.stderr }}
-      - run: echo ${{ steps.run.outputs.exitcode }}
+        env:
+          TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
+          TF_VAR_region: ${{ secrets.REGION }}
+          TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
