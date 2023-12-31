@@ -28,12 +28,13 @@ jobs:
         run: |
           cd ./terraform
           terraform init
+          ls
 
       - id: run
         name: Terraform apply/destroy
         run: |
           cd ./terraform
-          ls
+          echo ls
 
       - run: echo ${{ steps.run.outputs.stdout }}
       - run: echo ${{ steps.run.outputs.stderr }}
