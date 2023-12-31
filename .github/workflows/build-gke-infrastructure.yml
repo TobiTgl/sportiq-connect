@@ -34,7 +34,7 @@ jobs:
         name: Terraform apply/destroy
         run: |
           cd ./terraform
-          terrafrom plan -no-color
+          terraform plan -no-color
 
       - run: echo ${{ steps.run.outputs.stdout }}
       - run: echo ${{ steps.run.outputs.stderr }}
