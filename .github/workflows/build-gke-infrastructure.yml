@@ -24,12 +24,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3.0.0
 
       - id: init
-        run: |-
+        run: |
           cd ./terraform
           terraform init
 
       - id: run
-        run: |-
+        run: |
           cd ./terraform
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
               terraform apply -auto-approve
