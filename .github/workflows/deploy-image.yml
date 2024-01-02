@@ -73,6 +73,6 @@ jobs:
             kubectl apply -f frontend-service.yaml
             kubectl get all
 
-            kubectl set image deployment/backend-deployment backend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${{ github.event.inputs.version }}-${{ github.event.inputs.env }}
-            kubectl set image deployment/frontend-deployment frontend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-frontend:${{ github.event.inputs.version }}-${{ github.event.inputs.env }}
+            kubectl set image deployment/backend-deployment backend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-backend:${{ github.event.inputs.version }}
+            kubectl set image deployment/frontend-deployment frontend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-frontend:${{ github.event.inputs.version }}
          
