@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       tf:
-        description: "Bulild/Destroy"
+        description: "Build/Destroy"
         required: true
         default: "build"
         type: choice
