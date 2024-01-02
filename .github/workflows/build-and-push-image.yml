@@ -51,6 +51,7 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
       
       - id: 'get-credentials'
+        if: github.event.inputs.deploy == 'true'
         name: Get GKE credentials
         uses: 'google-github-actions/get-gke-credentials@v2'
         with:
