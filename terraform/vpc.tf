@@ -5,7 +5,7 @@ provider "google" {
 
 # Create a dedicated VPC for the GKE cluster
 resource "google_compute_network" "vpc" {
-  name                    = "${var.project_id}-vpc"
+  name                    = "${var.project_id}-vpc-${var.env}"
   auto_create_subnetworks = "false"
 }
 
