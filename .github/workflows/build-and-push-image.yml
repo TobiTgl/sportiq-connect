@@ -31,7 +31,7 @@ env:
   GAR_LOCATION: europe-west3
 
 jobs:
-  deploy:
+  build_push_deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
       contents: 'read'
@@ -51,6 +51,7 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
       
       - id: 'get-credentials'
+        name: Get GKE credentials
         uses: 'google-github-actions/get-gke-credentials@v2'
         with:
           cluster_name: 'sportiqconnect-gke-${{ github.event.inputs.env }}'

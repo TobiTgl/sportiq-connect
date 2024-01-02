@@ -22,7 +22,7 @@ on:
           - prod
 
 jobs:
-  deploy:
+  build_destroy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
