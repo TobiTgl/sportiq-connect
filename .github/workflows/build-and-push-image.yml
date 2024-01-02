@@ -53,7 +53,7 @@ jobs:
       - id: 'get-credentials'
         uses: 'google-github-actions/get-gke-credentials@v2'
         with:
-          cluster_name: 'quixotic-market-402317-gke'
+          cluster_name: 'sportiqconnect-gke-${{ github.event.inputs.env }}'
           location: 'us-central1-c'
 
       # Authenticate Docker to Google Cloud Artifact Registry
