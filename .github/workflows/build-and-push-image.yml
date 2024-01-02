@@ -1,4 +1,4 @@
-name: Build container image and push into registry
+name: Build Image, push into Artifact Registry & Deploy to Kubernetes
 
 # start on push on tag e.g. v0.0.0
 on:
@@ -102,7 +102,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          if [[ "${{ github.event_name }}" == "push" || "${{ github.event.inputs.deploy }}"]]; then
+          if [[ "${{ github.event_name }}" == "push" ]] || [[ "${{ github.event.inputs.deploy }}" ]]; then
             cd ./kubernetes
             kubectl apply -f ingress-controller.yaml
             kubectl apply -f ingress.yaml
