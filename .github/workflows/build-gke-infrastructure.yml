@@ -12,6 +12,14 @@ on:
         options:
           - build
           - destroy
+      env:
+        description: "Environment to build/destroy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
 
 jobs:
   deploy:
@@ -40,18 +48,14 @@ jobs:
           TF_VAR_region: ${{ secrets.REGION }}
           TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
           TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+          TF_VAR_env: ${{ github.event.inputs.env }}
 
       - id: run
         name: Terraform apply/destroy
         run: |
           cd ./terraform
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
-              terraform apply -auto-approve
+              terraform apply -auto-approve -no-color
           elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
-                            terraform destroy -auto-approve
+              terraform destroy -auto-approve -no-color
           fi
-        env:
-          TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-          TF_VAR_region: ${{ secrets.REGION }}
-          TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}

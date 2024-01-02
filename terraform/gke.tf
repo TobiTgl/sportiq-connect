@@ -5,7 +5,7 @@ data "google_container_engine_versions" "gke_version" {
 }
 
 resource "google_container_cluster" "primary" {
-  name     = "${var.project_id}-gke"
+  name     = "${var.deployment_name}-gke-${var.env}"
   location = "${var.region}-c"
 
   # We can't create a cluster with no node pool defined, but we want to only use
@@ -65,15 +65,11 @@ resource "kubernetes_secret" "secret" {
 }
 
 data "google_client_config" "default" {}
-data "google_container_cluster" "primary" {
-  name     = google_container_cluster.primary.name
-  location = "${var.region}-c"
-}
 
 provider "kubernetes" {
-  host                   = "https://${data.google_container_cluster.primary.endpoint}"
+  host                   = "https://${google_container_cluster.primary.endpoint}"
   token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(data.google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
+  cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
 }
 
 # state of terraform infrastructure
