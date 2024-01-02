@@ -33,10 +33,10 @@ jobs:
 
       - name: Google Auth
         id: auth
-        uses: 'google-github-actions/auth@v0'
+        uses: "google-github-actions/auth@v0"
         with:
-          token_format: 'access_token'
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          token_format: "access_token"
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
       - id: init
         name: Terraform init
@@ -53,7 +53,7 @@ jobs:
       - id: run
         name: Terraform apply/destroy
         run: |
-          cd ./terraform/${{ github.event.inputs.env }}
+          cd ./terraform
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
               terraform apply -auto-approve -no-color
           elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
@@ -65,5 +65,3 @@ jobs:
           TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
           TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
           TF_VAR_env: ${{ github.event.inputs.env }}
-
-        
