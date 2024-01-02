@@ -23,8 +23,6 @@ on:
         description: 'version'
         required: true
         type: string
-      environment:
-        type: environment
       deploy:
         type: boolean
 
