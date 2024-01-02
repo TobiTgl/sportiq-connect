@@ -104,7 +104,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "push" ]] || [[ "${{ github.event.inputs.deploy }}" ]]; then
             cd ./kubernetes
-            kubectl apply -f ingress-controller.yaml
+            kubectl apply -f ingress-controller-${{ github.event.inputs.env }}.yaml
             kubectl apply -f ingress.yaml
             kubectl apply -f backend-deployment.yaml
             kubectl apply -f backend-service.yaml
