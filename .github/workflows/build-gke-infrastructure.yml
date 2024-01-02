@@ -13,7 +13,7 @@ on:
           - build
           - destroy
       env:
-        description: "Environment to build/destroy"
+        description: "Environment to Build/Destroy"
         required: true
         default: "dev"
         type: choice
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: HashiCorp - Setup Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3.0.0
 
       - name: Google Auth
@@ -42,7 +42,7 @@ jobs:
         name: Terraform init
         run: |
           cd ./terraform
-          terraform init
+          terraform init -backend-config="prefix=terraform/state/${{ github.event.inputs.env }}"
         env:
           TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
           TF_VAR_region: ${{ secrets.REGION }}
@@ -53,7 +53,7 @@ jobs:
       - id: run
         name: Terraform apply/destroy
         run: |
-          cd ./terraform
+          cd ./terraform/${{ github.event.inputs.env }}
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
               terraform apply -auto-approve -no-color
           elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
