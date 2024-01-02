@@ -76,6 +76,5 @@ provider "kubernetes" {
 terraform {
  backend "gcs" {
    bucket  = "htwg-cloud-project"
-   prefix  = "terraform/state"
  }
 }
