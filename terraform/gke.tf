@@ -75,3 +75,11 @@ provider "kubernetes" {
   token                  = data.google_client_config.default.access_token
   cluster_ca_certificate = base64decode(data.google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
 }
+
+# state of terraform infrastructure
+terraform {
+ backend "gcs" {
+   bucket  = "htwg-cloud-project"
+   prefix  = "terraform/state"
+ }
+}

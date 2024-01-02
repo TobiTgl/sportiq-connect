@@ -41,7 +41,6 @@ jobs:
           TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
           TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
 
-
       - id: run
         name: Terraform apply/destroy
         run: |
@@ -49,7 +48,7 @@ jobs:
           if [[ "${{ github.event.inputs.tf }}" == "build" ]]; then
               terraform apply -auto-approve
           elif [[ "${{ github.event.inputs.tf }}" == "destroy" ]]; then
-              terraform destroy -auto-approve
+                            terraform destroy -auto-approve
           fi
         env:
           TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
