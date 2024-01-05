@@ -16,14 +16,14 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: backend-service
+            name: backend-service-company
             port:
               number: 4000
       - path: /()(.*)
         pathType: ImplementationSpecific
         backend:
           service:
-            name: frontend-service
+            name: frontend-service-company
             port:
               number: 3000
   ingressClassName: nginx
