@@ -20,11 +20,11 @@ export default {
       user?.getIdToken().then((token): void => {
         console.log(token);
         axios
-          .get(`${getBackendUrl()}/report/dailyreport`, {
+          .get(`${getBackendUrl()}/report`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
-            console.log(res.status);
+            console.log(res.data);
           })
           .catch((error) => {
             // error handling when Strava auth data could not be saved

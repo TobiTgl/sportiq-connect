@@ -19,7 +19,7 @@ export class ReportService {
     return `Hello! I am the report microservice.\nYour userId is: ${userId}\nYour tenantId is: ${tenantId}\n`;
   }
 
-  public async dailyreport(req: any): Promise<String> {
+  public async dailyreport(): Promise<String> {
     const end = new Date();
     const start = new Date();
     start.setTime(end.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours from the current time
@@ -43,6 +43,7 @@ export class ReportService {
     const newDailyReport = this.firestore
       .collection('report-service')
       .doc(end.toISOString());
+      
     await newDailyReport
       .set({
         timestamp: end,
