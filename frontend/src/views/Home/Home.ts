@@ -1,4 +1,9 @@
 import { useDisplay } from "vuetify";
+import { ref, onBeforeMount } from "vue";
+import { getAuth } from "firebase/auth";
+
+import axios from "axios";
+import { getBackendUrl } from "@/helpers/helpers";
 
 export default {
   name: "Home",
@@ -7,6 +12,26 @@ export default {
   },
   setup() {
     const { xs, smAndDown } = useDisplay();
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    onBeforeMount(() => {
+      user?.getIdToken().then((token): void => {
+        console.log(token);
+        axios
+          .get(`${getBackendUrl()}/report/dailyreport`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((res) => {
+            console.log(res.status);
+          })
+          .catch((error) => {
+            // error handling when Strava auth data could not be saved
+            console.log(error);
+          });
+      });
+    });
 
     return {
       xs,
