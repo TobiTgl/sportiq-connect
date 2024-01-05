@@ -19,7 +19,7 @@ export class ReportController {
   }
 
   @Get('dailyreport')
-  dailyreport(@Req() req, @Res() res: Response): void {
-    this.service.dailyreport(req);
+  dailyreport(@Req() req, @Res() res: Response): Promise<String> {
+    return this.service.dailyreport(req);
   }
 }
