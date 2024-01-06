@@ -3,17 +3,17 @@ kind: CronJob
 metadata:
   name: hello
 spec:
-  schedule: "*/15 * * * *"
+  schedule: "* * * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: hello
-            image: busybox:1.28
+            image: curlimages/curl:latest
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
             - -c
-            - date; echo Hello from the Kubernetes cluster
+            - 'curl -f http://backend-service:4000/report/dailyreport  -H "Authorization: Bearer <token>"'
           restartPolicy: OnFailure
