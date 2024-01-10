@@ -1,5 +1,16 @@
 <template>
+  <v-container v-if="data.length === 0">
+    <v-row class="fill-height" align-content="center" justify="center">
+      <v-col cols="12">
+        <v-alert icon="mdi-information-outline">
+          No reports have been posted yet!
+        </v-alert>
+      </v-col>
+    </v-row>
+  </v-container>
+
   <vue-flex-waterfall
+    v-else
     align-content="center"
     col="5"
     :break-at="breakAt"
