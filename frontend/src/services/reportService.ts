@@ -25,7 +25,7 @@ export async function getAllReports() {
   });
 }
 
-export async function getSingleReports(id: String) {
+export async function getSingleReport(id: String) {
   const auth = getAuth();
   return await auth.currentUser?.getIdToken().then((token) => {
     return axios
