@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ReportService {
@@ -64,6 +64,7 @@ export class ReportService {
 
   public async getSingleReport(id: string): Promise<Object> {
     // TODO: get report with the given id from database or return error
+    // throw new HttpException('Report not found', HttpStatus.NOT_FOUND);
     return {
       id: id,
       title: `Report ${id}`,

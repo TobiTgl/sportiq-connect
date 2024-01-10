@@ -39,9 +39,8 @@ export async function getSingleReport(id: String) {
         switch (error.code) {
           case "ERR_NETWORK":
             throw new Error("Backend not available. Please contact support.");
-          case "ERR_NOT_FOUND":
+          case "ERR_BAD_REQUEST":
             throw new Error("Report not found.");
-
           default:
             throw error;
         }

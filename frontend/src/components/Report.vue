@@ -8,6 +8,6 @@
 <script lang="ts" setup>
 defineProps({
   data: { type: Object, required: true },
-  width: { type: Number, required: true },
+  width: { type: Number, required: false },
 });
 </script>
