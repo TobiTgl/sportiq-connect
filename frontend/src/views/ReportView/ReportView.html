@@ -1,5 +1,5 @@
 <v-container fluid class="report-view">
-  <h1 class="mb-5">Report {{ report ? report.id : ""}}</h1>
+  <h1 class="mb-5">{{ report ? report.title : ""}}</h1>
   <v-container v-if="loading || showAlert">
     <v-row
       v-if="showAlert"
