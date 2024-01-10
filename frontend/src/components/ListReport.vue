@@ -22,6 +22,7 @@
       :id="item.title"
       :width="width"
       :data="item"
+      @click.prevent="() => $router.push(`/report/${item.id}`)"
     />
   </vue-flex-waterfall>
 </template>
