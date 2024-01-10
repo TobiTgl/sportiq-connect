@@ -1,4 +1,24 @@
 <v-container fluid class="dashboard">
   <h1 class="mb-5">Dashboard</h1>
-  <list-report v-if="!loading && !showAlert" :data="reports" />
+  <v-container v-if="loading || showAlert">
+    <v-row
+      v-if="showAlert"
+      class="fill-heigh"
+      align-content="center"
+      justify="center"
+    >
+      <v-col class="text-subtitle-1 text-center" cols="12">
+        <v-alert :type="alertType">{{ alertMessage }}</v-alert>
+      </v-col>
+      <v-col cols="12" v-if="loading">
+        <v-progress-linear
+          color="primary"
+          rounded
+          height="6"
+          indeterminate
+        ></v-progress-linear>
+      </v-col>
+    </v-row>
+  </v-container>
+  <list-report v-else :data="reports" />
 </v-container>
