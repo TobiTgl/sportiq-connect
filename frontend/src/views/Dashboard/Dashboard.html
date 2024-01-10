@@ -1,4 +1,4 @@
 <v-container fluid class="dashboard">
   <h1 class="mb-5">Dashboard</h1>
-  <list-report :data="reports" />
+  <list-report v-if="!loading && !showAlert" :data="reports" />
 </v-container>
