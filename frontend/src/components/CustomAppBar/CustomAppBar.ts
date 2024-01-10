@@ -14,6 +14,11 @@ export default {
           route: "Startpage",
           icon: "mdi-home",
         },
+        {
+          title: "Dashboard",
+          route: "Dashboard",
+          icon: "mdi-view-dashboard",
+        },
       ],
     };
   },
