@@ -1,4 +1,3 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   HttpException,
   HttpStatus,
@@ -125,6 +124,6 @@ export class ReportService {
       });
 
     console.log(reports.size);
-    return 'Report created'
+    return 'Report created';
   }
 }
