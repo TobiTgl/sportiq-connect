@@ -71,8 +71,8 @@ resource "kubernetes_secret" "tls_secret_default" {
   }
 
   data = {
-    tls.crt = "${var.tls_crt}"
-    tls.key = "${var.tls_key}"
+    "tls.crt" = "${var.tls_crt}"
+    "tls.key" = "${var.tls_key}"
   }
 
   type = "kubernetes.io/tls"
@@ -86,8 +86,8 @@ resource "kubernetes_secret" "tls_secret_company" {
   }
 
   data = {
-    tls.crt = "${var.tls_crt}"
-    tls.key = "${var.tls_key}"
+    "tls.crt" = "${var.tls_crt}"
+    "tls.key" = "${var.tls_key}"
   }
 
   type = "kubernetes.io/tls"
