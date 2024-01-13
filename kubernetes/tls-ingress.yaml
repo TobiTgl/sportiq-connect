@@ -11,10 +11,10 @@ spec:
   tls:
   - hosts:
       - sportiq-connect.de
-    secretName: quickstart-example-tls
+    secretName: tls-secret
   rules:
   - host: sportiq-connect.de
-  - http:
+    http:
       paths:
       - path: /backend(/|$)(.*)
         pathType: ImplementationSpecific

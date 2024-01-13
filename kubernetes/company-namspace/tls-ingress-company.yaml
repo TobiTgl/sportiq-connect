@@ -12,16 +12,16 @@ spec:
   tls:
   - hosts:
       - company.sportiq-connect.de
-    secretName: quickstart-example-tls
+    secretName: tls-secret
   rules:
   - host: company.sportiq-connect.de
-  - http:
+    http:
       paths:
       - path: /backend(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
-            name: backend-service
+            name: backend-service-company
             port:
               number: 4000
       - path: /()(.*)
@@ -29,7 +29,7 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: frontend-service
+            name: frontend-service-company
             port:
               number: 3000
   ingressClassName: nginx
