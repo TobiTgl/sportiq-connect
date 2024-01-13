@@ -1,2 +1,5 @@
 kubernetes-key.json
 backend-secret.yaml
+cert.crt
+tls.key
+tls-secret.yaml
