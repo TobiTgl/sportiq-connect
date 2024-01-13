@@ -27,3 +27,6 @@ variable "project_id" {
 variable "region" {
   description = "region"
 }
+
+variable "tls_crt" {}
+variable "tls_key" {}

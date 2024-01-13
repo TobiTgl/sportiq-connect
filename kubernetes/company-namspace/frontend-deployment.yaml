@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment-company
+  namespace: company
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-project
+  template:
+    metadata:
+      labels:
+        app: cloud-project
+    spec:
+      containers:
+        - name: frontend
+          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-frontend:v0.0
+          ports:
+          - containerPort: 3000
+      imagePullSecrets:
+      - name: regcred
