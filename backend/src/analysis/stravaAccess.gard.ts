@@ -9,11 +9,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import axios from 'axios';
-import {
-  DocumentReference,
-  DocumentSnapshot,
-  Firestore,
-} from 'firebase-admin/firestore';
+import { DocumentSnapshot, Firestore } from 'firebase-admin/firestore';
 
 @Injectable()
 export class StravaAccessGuard implements CanActivate {
@@ -42,7 +38,6 @@ export class StravaAccessGuard implements CanActivate {
         HttpStatus.NO_CONTENT,
       );
     }
-    console.log(user.data());
 
     const currentTime: number = Math.floor(new Date().getTime() / 1000) - 30;
 
