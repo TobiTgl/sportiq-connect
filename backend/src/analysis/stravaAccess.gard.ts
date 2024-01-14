@@ -9,7 +9,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import axios from 'axios';
-import { Firestore } from 'firebase-admin/firestore';
+import {
+  DocumentReference,
+  DocumentSnapshot,
+  Firestore,
+} from 'firebase-admin/firestore';
 
 @Injectable()
 export class StravaAccessGuard implements CanActivate {
@@ -32,12 +36,13 @@ export class StravaAccessGuard implements CanActivate {
       .doc(userId);
 
     const user = await this.getUser(userRef);
-    if (!user.data().stravaAccessToken) {
+    if (user.exists === false) {
       throw new HttpException(
         'No Strava Account connected',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.NO_CONTENT,
       );
     }
+    console.log(user.data());
 
     const currentTime: number = Math.floor(new Date().getTime() / 1000) - 30;
 
@@ -83,7 +88,7 @@ export class StravaAccessGuard implements CanActivate {
     return true;
   }
 
-  private async getUser(userRef: any) {
+  private async getUser(userRef: any): Promise<DocumentSnapshot> {
     return await userRef.get().catch((error) => {
       this.logger.error(error);
       throw new HttpException(
