@@ -39,9 +39,9 @@ export class StravaAccessGuard implements CanActivate {
       );
     }
 
-    const currentTime: number = Math.floor(new Date().getTime() / 1000) + 30;
+    const currentTime: number = Math.floor(new Date().getTime() / 1000) - 30;
 
-    if (user.data().accessTokenExpiresAt > currentTime) {
+    if (user.data().accessTokenExpiresAt < currentTime) {
       // create url
       const stravaRefreshUrl = `https://www.strava.com/oauth/token?client_id=${
         process.env.CLIENT_ID
