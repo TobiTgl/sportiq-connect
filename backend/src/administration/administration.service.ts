@@ -23,7 +23,7 @@ export class AdministrationService {
     await this.refreshAccessToken(req);
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -51,7 +51,7 @@ export class AdministrationService {
   async disconnectStrava(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -101,7 +101,7 @@ export class AdministrationService {
 
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     await userRef
       .set({
@@ -124,7 +124,7 @@ export class AdministrationService {
   public async refreshAccessToken(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -167,7 +167,7 @@ export class AdministrationService {
   async getStravaId(req: any) {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
