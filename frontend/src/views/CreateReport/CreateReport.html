@@ -1,3 +1,71 @@
 <v-container fluid class="create">
-  <h1>Create Report</h1>
+  <h1 class="mb-3">Create Report</h1>
+
+  <!-- Not connected to strava alert -->
+  <v-alert type="info" v-if="notConnected">
+    No Strava Account connected! Please go to your
+    <router-link to="/profile">Profile</router-link>
+    and connect a Strava account!
+  </v-alert>
+
+  <v-form v-if="!notConnected && !showAlert">
+    <!-- start date -->
+    <v-text-field
+      label="Start Date"
+      type="date"
+      v-model="startDate"
+      variant="solo"
+    />
+
+    <!-- end date  -->
+    <v-text-field
+      label="End Date"
+      type="date"
+      v-model="endDate"
+      variant="solo"
+    />
+
+    <v-select
+      v-model="selectedOption"
+      :items="listOfTypes"
+      label="Select an Option"
+    ></v-select>
+    <v-btn color="primary" @click.prevent="getActivities">Query</v-btn>
+  </v-form>
+
+  <!-- alert -->
+  <v-container v-if="loading || showAlert">
+    <v-row
+      v-if="showAlert"
+      class="fill-heigh"
+      align-content="center"
+      justify="center"
+    >
+      <v-col class="text-subtitle-1 text-center" cols="12">
+        <v-alert :type="alertType">{{ alertMessage }}</v-alert>
+      </v-col>
+      <v-col cols="12" v-if="loading">
+        <v-progress-linear
+          color="primary"
+          rounded
+          height="6"
+          indeterminate
+        ></v-progress-linear>
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <v-alert v-if="loading === false && (length === 0)" class="mt-5" type="info">
+    No activities found</v-alert
+  >
+
+  <v-card v-else v-for="item in listOfActivities" class="mb-3">
+    <v-card-title>{{item.name}}</v-card-title>
+    <v-card-text>
+      <p>Distance = {{item.distance}}</p>
+      <p>Type = {{item.type}}</p>
+      <p>Moving Time: {{item.moving_time}}</p>
+      <p>{{new Date(item.start_date)}}</p>
+    </v-card-text>
+  </v-card>
 </v-container>

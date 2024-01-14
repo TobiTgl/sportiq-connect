@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { StravaAccessGuard } from 'src/analysis/stravaAccess.gard';
 import { AuthGuard } from 'src/auth/auth.gard';
@@ -21,9 +21,9 @@ export class AnalysisController {
 
   @Get('activities')
   @UseGuards(StravaAccessGuard)
-  getActivities(@Req() req): Promise<Array<any>> {
+  getActivities(@Query() queryParams: any, @Req() req): Promise<Array<any>> {
     const user: DecodedIdToken = req.user;
     const stravaAccessToken = user?.stravaAccessToken;
-    return this.service.getActivities(stravaAccessToken);
+    return this.service.getActivities(stravaAccessToken, queryParams);
   }
 }
