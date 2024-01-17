@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud-project
+      app: frontend-service-company
   template:
     metadata:
       labels:
-        app: cloud-project
+        app: frontend-service-company
     spec:
       containers:
         - name: frontend
