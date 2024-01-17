@@ -31,12 +31,17 @@ export class AuthController {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
     const tenantName = req.body.tenant;
+    let role = req.body?.role;
+
+    if (role === undefined) {
+      role = 'Athlete';
+    }
 
     if (!tenantName) {
       throw new BadRequestException('No tenant provided');
     }
 
-    return this.service.setTenant(userId, tenantName);
+    return this.service.setTenantAndRole(userId, tenantName, role);
   }
 
   @Get('gettenant')

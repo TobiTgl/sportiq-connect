@@ -20,6 +20,7 @@ export class AuthGuard implements CanActivate {
       request['user'] = {
         name: 'Dev User',
         tenant: 'Free',
+        role: 'Admin',
         email: 'max@mustermann.de',
         uid: 'ufDIBgds93WAN4EdXWFDbAWt9Es1',
       };
