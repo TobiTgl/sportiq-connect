@@ -61,6 +61,20 @@ resource "kubernetes_namespace" "company" {
 }
 
 # secrets for backend deployment env vars
+resource "kubernetes_secret" "secrets_company" {
+  metadata {
+    name      = "backend-secrets"
+    namespace = kubernetes_namespace.company.metadata.0.name
+  }
+  data = {
+    CLIENT_ID     = "${var.client_id}"
+    CLIENT_SECRET = "${var.client_secret}"
+  }
+
+  type = "Opaque"
+}
+
+# secrets for backend deployment company env vars
 resource "kubernetes_secret" "secret" {
   metadata {
     name = "backend-secrets"
