@@ -80,7 +80,7 @@
 
   <v-divider class="mt-5"></v-divider>
 
-  <v-list>
+  <v-list color="primary">
     <v-list-item
       v-for="item in features"
       :key="item.title"
@@ -94,11 +94,20 @@
 
   <v-divider class="mt-5"></v-divider>
 
-  <v-list nav>
+  <v-list color="primary">
     <v-list-item
       :title="themeTitle"
       prepend-icon="mdi-theme-light-dark"
       @click="toggleTheme"
+    />
+
+    <v-list-item
+      v-if="user && user.isAdmin"
+      title="Administration"
+      prepend-icon="mdi-account-cog-outline"
+      link
+      router
+      :to="{ name: 'Admin'}"
     />
   </v-list>
 </v-navigation-drawer>
