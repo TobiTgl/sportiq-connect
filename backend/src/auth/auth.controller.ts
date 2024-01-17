@@ -6,6 +6,8 @@ import {
   Req,
   UseGuards,
   BadRequestException,
+  Body,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
@@ -48,5 +50,25 @@ export class AuthController {
   getTenant(@Req() req): Promise<String> {
     const user: DecodedIdToken = req.user;
     return user?.tenant;
+  }
+
+  @Post('users/create')
+  getUsers(@Req() req, @Body() body): Promise<Boolean> {
+    const user: DecodedIdToken = req.user;
+    const userId = user?.uid;
+    const tenantId = user?.tenant;
+    const userRole = user?.role;
+
+    // if (tenantId === 'Free' || tenantId === 'Standard') {
+    //   throw new UnauthorizedException(
+    //     'Only enterprise tenants can create users',
+    //   );
+    // }
+
+    // if (userRole !== 'admin') {
+    //   throw new UnauthorizedException('Only admins can create users');
+    // }
+
+    return this.service.createUser(body.name, body.email, body.role, tenantId);
   }
 }

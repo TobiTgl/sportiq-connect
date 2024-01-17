@@ -45,4 +45,32 @@ export class AuthService {
         throw new BadRequestException(error);
       });
   }
+
+  public async createUser(
+    name: string,
+    email: string,
+    role: string,
+    tenant: string,
+  ): Promise<Boolean> {
+    // create user
+    let user = await admin
+      .auth()
+      .createUser({
+        displayName: name,
+        email: email,
+        password: 'SiqC@' + new Date().getFullYear(),
+      })
+      .catch((error) => {
+        this.logger.error('Error creating user: ' + error);
+        throw new BadRequestException(error);
+      });
+
+    // set tenant and role
+    await this.setTenantAndRole(user.uid, tenant, role);
+
+    this.logger.log(
+      'Created user: ' + name + ', ' + email + ', ' + role + ', ' + tenant,
+    );
+    return false;
+  }
 }
