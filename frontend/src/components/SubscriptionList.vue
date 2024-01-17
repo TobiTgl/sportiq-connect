@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="text-center">
-    <h1>Get the complete analysis platform.</h1>
+    <h1>Get the complete company analysis platform.</h1>
     <v-row justify="center" class="mt-3">
       <v-col cols="12" class="pb-0">
         <v-label>How often do you want to pay?</v-label>
