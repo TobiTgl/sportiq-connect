@@ -2,13 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: report-service
+  name: auth-service
+  namespace: company
 spec:
   type: ClusterIP
   selector:
-    app: report-service
+    app: auth-service
   ports:
   - protocol: TCP
-    port: 4003
+    port: 4001
     targetPort: 4000
 ...
