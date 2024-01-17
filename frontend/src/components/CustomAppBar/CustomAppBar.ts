@@ -26,13 +26,13 @@ export default {
     const theme = useTheme();
     const { xs, lgAndUp } = useDisplay();
     const drawer = ref(lgAndUp.value ? true : false);
-    const themeTitle = ref(theme.global.current.value.dark ? "Dunkel" : "Hell");
+    const themeTitle = ref(theme.global.current.value.dark ? "Dark" : "Light");
 
     const toggleTheme = () => {
       theme.global.name.value = theme.global.current.value.dark
         ? "light"
         : "dark";
-      themeTitle.value = theme.global.current.value.dark ? "Dunkel" : "Hell";
+      themeTitle.value = theme.global.current.value.dark ? "Dark" : "Light";
     };
 
     const auth = getAuth();
