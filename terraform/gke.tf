@@ -81,8 +81,8 @@ resource "kubernetes_secret" "tls_secret_default" {
   }
 
   data = {
-    "tls.crt" = "${var.tls_crt}"
-    "tls.key" = "${var.tls_key}"
+    "tls.crt" = "${base64decode(var.tls_crt)}"
+    "tls.key" = "${base64decode(var.tls_key)}"
   }
 
   type = "kubernetes.io/tls"
@@ -92,12 +92,12 @@ resource "kubernetes_secret" "tls_secret_default" {
 resource "kubernetes_secret" "tls_secret_company" {
   metadata {
     name      = "tls-secret-company"
-    namespace = "company"
+    namespace = kubernetes_namespace.company.metadata.0.name
   }
 
   data = {
-    "tls.crt" = "${var.tls_crt}"
-    "tls.key" = "${var.tls_key}"
+    "tls.crt" = "${base64decode(var.tls_crt)}"
+    "tls.key" = "${base64decode(var.tls_key)}"
   }
 
   type = "kubernetes.io/tls"
