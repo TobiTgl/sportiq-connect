@@ -20,7 +20,24 @@
     </v-container>
 
     <template v-else>
-      <span>Welcome to admin page! </span>
+      <v-tabs v-model="tab" color="primary" class="mb-3" stacked>
+        <v-tab value="UserManagement">
+          <v-icon>mdi-account</v-icon>
+          User Management
+        </v-tab>
+        <v-tab value="Customization">
+          <v-icon>mdi-shape-outline</v-icon>
+          Customization
+        </v-tab>
+      </v-tabs>
+      <v-window v-model="tab">
+        <v-window-item value="UserManagement">
+          <user-management />
+        </v-window-item>
+        <v-window-item value="Customization">
+          <customization />
+        </v-window-item>
+      </v-window>
     </template>
   </v-container>
 </template>
@@ -29,6 +46,9 @@
 import router from "@/router";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
+import UserManagement from "@/components/UserManagement.vue";
+import Customization from "@/components/Customization.vue";
+const tab = ref("UserManagement");
 
 const loading = ref(true);
 const auth = getAuth();
