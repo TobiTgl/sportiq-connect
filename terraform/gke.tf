@@ -50,6 +50,15 @@ resource "google_container_node_pool" "primary_nodes" {
   }
 }
 
+resource "kubernetes_namespace" "company" {
+  metadata {
+    annotations = {
+      name = "company-namespace"
+    }
+    name = "company"
+  }
+}
+
 # secrets for backend deployment env vars
 resource "kubernetes_secret" "secret" {
   metadata {
@@ -81,7 +90,7 @@ resource "kubernetes_secret" "tls_secret_default" {
 # TLS Secret for company namespace
 resource "kubernetes_secret" "tls_secret_company" {
   metadata {
-    name      = "tls-secret"
+    name      = "tls-secret-company"
     namespace = "company"
   }
 
