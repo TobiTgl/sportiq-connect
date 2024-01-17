@@ -96,4 +96,30 @@ export class AuthService {
     this.logger.log('Deleted user: ' + userId);
     return true;
   }
+
+  public async getUsers(tenant: string): Promise<Array<UserInfo>> {
+    const userList = await admin
+      .auth()
+      .listUsers()
+      .catch((error) => {
+        this.logger.error('Error listing users: ' + error);
+        throw new BadRequestException(error);
+      });
+
+    console.log(userList.users);
+
+    const userInfoList: Array<UserInfo> = [];
+    userList.users.forEach((user) => {
+      if (user.customClaims?.tenant === tenant) {
+        userInfoList.push({
+          userId: user.uid,
+          name: user.displayName,
+          email: user.email,
+          role: user.customClaims?.role,
+        });
+      }
+    });
+
+    return userInfoList;
+  }
 }

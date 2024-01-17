@@ -66,7 +66,7 @@ export class AuthController {
       );
     }
 
-    if (userRole !== 'admin') {
+    if (userRole !== 'Admin') {
       throw new UnauthorizedException('Only admins can create users');
     }
 
@@ -85,10 +85,27 @@ export class AuthController {
       );
     }
 
-    if (userRole !== 'admin') {
+    if (userRole !== 'Admin') {
       throw new UnauthorizedException('Only admins can delete users');
     }
 
     return this.service.deleteUser(body.userId);
+  }
+
+  @Get('users')
+  getUsers(@Req() req): Promise<Array<UserInfo>> {
+    const user: DecodedIdToken = req.user;
+    const tenantId = user?.tenant;
+    const userRole = user?.role;
+
+    if (tenantId === 'Free' || tenantId === 'Standard') {
+      throw new UnauthorizedException('Only enterprise tenants can list users');
+    }
+
+    if (userRole !== 'Admin') {
+      throw new UnauthorizedException('Only admins can list users');
+    }
+
+    return this.service.getUsers(tenantId);
   }
 }
