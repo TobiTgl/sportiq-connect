@@ -112,8 +112,8 @@ provider "kubernetes" {
 }
 
 # state of terraform infrastructure
-#terraform {
-#backend "gcs" {
-#bucket = "htwg-cloud-project"
-#}
-#}
+terraform {
+  backend "gcs" {
+    bucket = "htwg-cloud-project"
+  }
+}
