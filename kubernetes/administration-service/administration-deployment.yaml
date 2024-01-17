@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud-project
+      app: administration-service
   template:
     metadata:
       labels:
-        app: cloud-project
+        app: administration-service
     spec:
       containers:
         - name: administration

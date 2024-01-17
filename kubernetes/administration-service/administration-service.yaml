@@ -6,7 +6,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: cloud-project
+    app: administration-service
   ports:
   - protocol: TCP
     port: 4002

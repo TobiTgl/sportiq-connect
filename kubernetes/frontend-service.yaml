@@ -6,7 +6,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: cloud-project
+    app: frontend-service
   ports:
   - protocol: TCP
     port: 3000
