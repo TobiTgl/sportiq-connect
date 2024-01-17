@@ -59,6 +59,8 @@ if (
   (auth.currentUser as any).isAdmin === undefined
 ) {
   router.push({ name: "Home" });
+} else {
+  loading.value = false;
 }
 </script>
 
