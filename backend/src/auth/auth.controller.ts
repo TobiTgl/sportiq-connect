@@ -55,7 +55,7 @@ export class AuthController {
   }
 
   @Post('users/create')
-  getUser(@Req() req, @Body() body): Promise<UserInfo> {
+  createUser(@Req() req, @Body() body): Promise<UserInfo> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
     const userRole = user?.role;
