@@ -57,6 +57,7 @@ resource "kubernetes_namespace" "company" {
     }
     name = "company"
   }
+  depends_on = [google_container_node_pool.primary_nodes]
 }
 
 # secrets for backend deployment env vars
@@ -111,8 +112,8 @@ provider "kubernetes" {
 }
 
 # state of terraform infrastructure
-terraform {
-  backend "gcs" {
-    bucket = "htwg-cloud-project"
-  }
-}
+#terraform {
+#backend "gcs" {
+#bucket = "htwg-cloud-project"
+#}
+#}
