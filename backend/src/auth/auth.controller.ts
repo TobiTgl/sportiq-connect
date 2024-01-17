@@ -7,6 +7,7 @@ import {
   UseGuards,
   BadRequestException,
   Body,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
@@ -59,15 +60,15 @@ export class AuthController {
     const tenantId = user?.tenant;
     const userRole = user?.role;
 
-    // if (tenantId === 'Free' || tenantId === 'Standard') {
-    //   throw new UnauthorizedException(
-    //     'Only enterprise tenants can create users',
-    //   );
-    // }
+    if (tenantId === 'Free' || tenantId === 'Standard') {
+      throw new UnauthorizedException(
+        'Only enterprise tenants can create users',
+      );
+    }
 
-    // if (userRole !== 'admin') {
-    //   throw new UnauthorizedException('Only admins can create users');
-    // }
+    if (userRole !== 'admin') {
+      throw new UnauthorizedException('Only admins can create users');
+    }
 
     return this.service.createUser(body.name, body.email, body.role, tenantId);
   }
