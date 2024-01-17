@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: report
-          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-report:v0.1
+          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-report:company
           ports:
           - containerPort: 4000
           env:
