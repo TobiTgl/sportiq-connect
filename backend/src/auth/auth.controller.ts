@@ -8,6 +8,7 @@ import {
   BadRequestException,
   Body,
   UnauthorizedException,
+  Delete,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
@@ -54,9 +55,8 @@ export class AuthController {
   }
 
   @Post('users/create')
-  getUsers(@Req() req, @Body() body): Promise<UserInfo> {
+  getUser(@Req() req, @Body() body): Promise<UserInfo> {
     const user: DecodedIdToken = req.user;
-    const userId = user?.uid;
     const tenantId = user?.tenant;
     const userRole = user?.role;
 
@@ -71,5 +71,24 @@ export class AuthController {
     }
 
     return this.service.createUser(body.name, body.email, body.role, tenantId);
+  }
+
+  @Delete('users/delete')
+  deleteUser(@Req() req, @Body() body): Promise<Boolean> {
+    const user: DecodedIdToken = req.user;
+    const tenantId = user?.tenant;
+    const userRole = user?.role;
+
+    if (tenantId === 'Free' || tenantId === 'Standard') {
+      throw new UnauthorizedException(
+        'Only enterprise tenants can delete users',
+      );
+    }
+
+    if (userRole !== 'admin') {
+      throw new UnauthorizedException('Only admins can delete users');
+    }
+
+    return this.service.deleteUser(body.userId);
   }
 }

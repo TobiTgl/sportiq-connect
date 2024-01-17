@@ -83,5 +83,17 @@ export class AuthService {
     };
     return userInfo;
   }
+
+  public async deleteUser(userId: string): Promise<Boolean> {
+    await admin
+      .auth()
+      .deleteUser(userId)
+      .catch((error) => {
+        this.logger.error('Error deleting user: ' + error);
+        throw new BadRequestException(error);
+      });
+
+    this.logger.log('Deleted user: ' + userId);
+    return true;
   }
 }
