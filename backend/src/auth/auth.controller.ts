@@ -7,11 +7,11 @@ import {
   UseGuards,
   BadRequestException,
   Body,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
+import { UserInfo } from './auth.pb';
 import { AuthGuard } from './auth.gard';
 
 @Controller(AUTH_SERVICE_URL)
@@ -53,7 +53,7 @@ export class AuthController {
   }
 
   @Post('users/create')
-  getUsers(@Req() req, @Body() body): Promise<Boolean> {
+  getUsers(@Req() req, @Body() body): Promise<UserInfo> {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
     const tenantId = user?.tenant;

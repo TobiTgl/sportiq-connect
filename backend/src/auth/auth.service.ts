@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { UserInfo } from './auth.pb';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +52,7 @@ export class AuthService {
     email: string,
     role: string,
     tenant: string,
-  ): Promise<Boolean> {
+  ): Promise<UserInfo> {
     // create user
     let user = await admin
       .auth()
@@ -66,11 +67,21 @@ export class AuthService {
       });
 
     // set tenant and role
-    await this.setTenantAndRole(user.uid, tenant, role);
+    await this.setTenantAndRole(user.uid, tenant, role).catch((error) => {
+      throw error;
+    });
 
     this.logger.log(
       'Created user: ' + name + ', ' + email + ', ' + role + ', ' + tenant,
     );
-    return false;
+
+    const userInfo: UserInfo = {
+      userId: user.uid,
+      name: user.displayName,
+      email: user.email,
+      role: role,
+    };
+    return userInfo;
+  }
   }
 }
