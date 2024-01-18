@@ -2,14 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service-company
-  namespace: company
+  name: administration-service
 spec:
   type: ClusterIP
   selector:
-    app: cloud-project
+    app: administration-service
   ports:
   - protocol: TCP
-    port: 4000
+    port: 4002
     targetPort: 4000
 ...

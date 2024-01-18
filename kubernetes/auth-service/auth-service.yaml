@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: auth-service
 spec:
   type: ClusterIP
   selector:
-    app: frontend-service
+    app: auth-service
   ports:
   - protocol: TCP
-    port: 3000
-    targetPort: 3000
+    port: 4001
+    targetPort: 4000
 ...

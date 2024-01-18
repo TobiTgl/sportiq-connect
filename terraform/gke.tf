@@ -50,7 +50,31 @@ resource "google_container_node_pool" "primary_nodes" {
   }
 }
 
+resource "kubernetes_namespace" "company" {
+  metadata {
+    annotations = {
+      name = "company-namespace"
+    }
+    name = "company"
+  }
+  depends_on = [google_container_node_pool.primary_nodes]
+}
+
 # secrets for backend deployment env vars
+resource "kubernetes_secret" "secrets_company" {
+  metadata {
+    name      = "backend-secrets"
+    namespace = kubernetes_namespace.company.metadata.0.name
+  }
+  data = {
+    CLIENT_ID     = "${var.client_id}"
+    CLIENT_SECRET = "${var.client_secret}"
+  }
+
+  type = "Opaque"
+}
+
+# secrets for backend deployment company env vars
 resource "kubernetes_secret" "secret" {
   metadata {
     name = "backend-secrets"
@@ -71,8 +95,8 @@ resource "kubernetes_secret" "tls_secret_default" {
   }
 
   data = {
-    "tls.crt" = "${var.tls_crt}"
-    "tls.key" = "${var.tls_key}"
+    "tls.crt" = "${base64decode(var.tls_crt)}"
+    "tls.key" = "${base64decode(var.tls_key)}"
   }
 
   type = "kubernetes.io/tls"
@@ -81,13 +105,13 @@ resource "kubernetes_secret" "tls_secret_default" {
 # TLS Secret for company namespace
 resource "kubernetes_secret" "tls_secret_company" {
   metadata {
-    name      = "tls-secret"
-    namespace = "company"
+    name      = "tls-secret-company"
+    namespace = kubernetes_namespace.company.metadata.0.name
   }
 
   data = {
-    "tls.crt" = "${var.tls_crt}"
-    "tls.key" = "${var.tls_key}"
+    "tls.crt" = "${base64decode(var.tls_crt_company)}"
+    "tls.key" = "${base64decode(var.tls_key_company)}"
   }
 
   type = "kubernetes.io/tls"
