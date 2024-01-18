@@ -6,7 +6,7 @@
     <v-container fluid v-if="loading">
       <v-row class="fill-heigh" align-content="center" justify="center">
         <v-col class="text-center" cols="12">
-          <v-alert type="info">message</v-alert>
+          <v-alert type="info">Loading...</v-alert>
         </v-col>
         <v-col cols="12" v-if="loading">
           <v-progress-linear
@@ -48,20 +48,25 @@ import { getAuth } from "firebase/auth";
 import { ref } from "vue";
 import UserManagement from "@/components/UserManagement.vue";
 import Customization from "@/components/Customization.vue";
+import { onBeforeMount } from "vue";
 const tab = ref("UserManagement");
 
 const loading = ref(true);
-const auth = getAuth();
+const role = ref("");
 
-// check if user is admin and if not redirect to home page
-if (
-  (auth.currentUser as any).isAdmin === false ||
-  (auth.currentUser as any).isAdmin === undefined
-) {
-  router.push({ name: "Home" });
-} else {
-  loading.value = false;
-}
+onBeforeMount(async () => {
+  await getAuth()
+    .currentUser?.getIdTokenResult(true)
+    .then((res) => {
+      role.value = "" + res.claims.role;
+    });
+  // check if user is admin and if not redirect to home page
+  if (role.value !== "Admin" || role.value === undefined) {
+    router.push({ name: "Home" });
+  } else {
+    loading.value = false;
+  }
+});
 </script>
 
 <style lang="scss"></style>
