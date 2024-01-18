@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: administration
-          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-administration:v0.1
+          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-administration:v0.2
           ports:
           - containerPort: 4000
           env:
