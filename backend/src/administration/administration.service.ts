@@ -117,6 +117,7 @@ export class AdministrationService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
+    this.logger.log(`User ${req.user.sub} connected to Strava`);
     return authData.data.athlete.id;
   }
 

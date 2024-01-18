@@ -12,18 +12,32 @@ spec:
   tls:
   - hosts:
       - company.sportiq-connect.de
-    secretName: tls-secret
+    secretName: tls-secret-company
   rules:
   - host: company.sportiq-connect.de
     http:
       paths:
-      - path: /backend(/|$)(.*)
+      - path: /auth(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
-            name: backend-service-company
+            name: auth-service
             port:
-              number: 4000
+              number: 4001
+      - path: /administration(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: administration-service
+            port:
+              number: 4002
+      - path: /report(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: report-service
+            port:
+              number: 4003
       - path: /()(.*)
 #      - path: /
         pathType: ImplementationSpecific

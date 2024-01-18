@@ -57,7 +57,7 @@ import { ref, onBeforeMount } from "vue";
 import { getStravaAuthUrl } from "@/helpers/helpers";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAdministrationServiceUrl } from "@/helpers/helpers";
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -77,7 +77,7 @@ const stravaAuth = () => {
 const disconnectStrava = () => {
   user?.getIdToken().then((token) => {
     axios
-      .get(`${getBackendUrl()}/administration/disconnectStrava`, {
+      .get(`${getAdministrationServiceUrl()}/administration/disconnectStrava`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

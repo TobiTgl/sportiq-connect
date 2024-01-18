@@ -2,7 +2,7 @@ import { ref, onBeforeMount } from "vue";
 import { getAuth } from "firebase/auth";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAdministrationServiceUrl } from "@/helpers/helpers";
 
 import LoadingAlert from "@/components/LoadingAlert.vue";
 
@@ -43,9 +43,12 @@ export default {
         // Send Strava auth code to backend
         user?.getIdToken().then((token) => {
           axios
-            .get(`${getBackendUrl()}/administration/stravaAuth?code=${code}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
+            .get(
+              `${getAdministrationServiceUrl()}/administration/stravaAuth?code=${code}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            )
             .then((res) => {
               // Strava auth data saved successfully
               localStorage.setItem("athleteId", res.data);
