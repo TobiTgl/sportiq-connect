@@ -146,6 +146,10 @@ jobs:
           kubectl apply -f frontend-service.yaml
           kubectl get all
 
+          kubectl autoscale deployment administration-deployment --cpu-percent=50 --min=2 --max=3
+          kubectl autoscale deployment auth-deployment --cpu-percent=50 --min=2 --max=3
+          kubectl autoscale deployment report-deployment --cpu-percent=50 --min=2 --max=3
+
           kubectl set image deployment/auth-deployment auth=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-auth:${{ github.event.inputs.version }}
           kubectl set image deployment/administration-deployment administration=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-administration:${{ github.event.inputs.version }}
           kubectl set image deployment/report-deployment report=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-report:${{ github.event.inputs.version }}

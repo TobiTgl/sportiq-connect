@@ -98,7 +98,7 @@ export class AdministrationService {
         }),
       ),
     );
-    console.log(req.user);
+
     const userRef = this.firestore
       .collection('administration-service')
       .doc(req.user.sub);
