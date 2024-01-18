@@ -36,7 +36,7 @@
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
-import { getAuthServiceUrl, getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
 import { onBeforeMount } from "vue";
 
 const auth = getAuth();

@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAdministrationServiceUrl } from "@/helpers/helpers";
 import vuetify from "@/plugins/vuetify";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
@@ -91,7 +91,7 @@ async function updateColor() {
 
   await axios
     .post(
-      getBackendUrl() + "/administration/theme",
+      getAdministrationServiceUrl() + "/administration/theme",
       {
         color: color.value,
       },

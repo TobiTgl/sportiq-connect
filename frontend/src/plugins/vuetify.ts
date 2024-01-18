@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAdministrationServiceUrl } from "@/helpers/helpers";
 
 // Styles
 import "@mdi/font/css/materialdesignicons.css";
@@ -14,7 +14,7 @@ let customColor = "#48A9A6";
 if (window.location.hostname.split(".").length > 1) {
   let subdomain = window.location.hostname.split(".")[0];
   await axios
-    .get(getBackendUrl() + "/administration/theme/" + subdomain)
+    .get(getAdministrationServiceUrl() + "/administration/theme/" + subdomain)
     .then((res) => {
       customColor = res.data;
     })

@@ -115,7 +115,7 @@ import { getAuth } from "firebase/auth";
 const auth = getAuth();
 import axios from "axios";
 import { ref } from "vue";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
 import { onBeforeMount } from "vue";
 const loading = ref(true);
 
@@ -174,7 +174,7 @@ onBeforeMount(() => {
     ?.getIdToken()
     .then((token) => {
       axios
-        .get(getBackendUrl() + "/auth/users", {
+        .get(getAuthServiceUrl() + "/auth/users", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -195,7 +195,7 @@ async function createUser() {
     .then((token) => {
       axios
         .post(
-          getBackendUrl() + "/auth/users/create",
+          getAuthServiceUrl() + "/auth/users/create",
           {
             name: name.value,
             email: email.value,
@@ -233,7 +233,7 @@ async function deleteUser(item: any) {
     ?.getIdToken()
     .then((token) => {
       axios
-        .delete(getBackendUrl() + "/auth/users/delete/" + item.userId, {
+        .delete(getAuthServiceUrl() + "/auth/users/delete/" + item.userId, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
@@ -254,7 +254,7 @@ async function resetPassword(userId: string) {
     ?.getIdToken()
     .then((token) => {
       axios
-        .patch(getBackendUrl() + "/auth/users/reset/" + userId, {
+        .patch(getAuthServiceUrl() + "/auth/users/reset/" + userId, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
