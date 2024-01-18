@@ -106,8 +106,6 @@ export class AuthService {
         throw new BadRequestException(error);
       });
 
-    console.log(userList.users);
-
     const userInfoList: Array<UserInfo> = [];
     userList.users.forEach((user) => {
       if (user.customClaims?.tenant === tenant) {
