@@ -32,12 +32,12 @@ export class AuthController {
     return this.service.hello(userId, tenantId);
   }
 
-  @Post('settenant')
-  setTenant(@Req() req): Promise<void> {
+  @Patch('settenant')
+  setTenant(@Req() req, @Body() body): Promise<void> {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
-    const tenantName = req.body.tenant;
-    let role = req.body?.role;
+    let role = user.role;
+    const tenantName = body.tenant;
 
     if (role === undefined) {
       role = 'Athlete';
