@@ -1,6 +1,6 @@
 import { useTheme } from "vuetify";
 import { useDisplay } from "vuetify";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import router from "@/router";
 
@@ -13,11 +13,13 @@ export default {
           title: "Home",
           route: "Startpage",
           icon: "mdi-home",
+          needsAuth: false,
         },
         {
           title: "Dashboard",
           route: "Dashboard",
           icon: "mdi-view-dashboard",
+          needsAuth: true,
         },
       ],
     };
@@ -63,6 +65,20 @@ export default {
       router.push({ name: "" + route });
     };
 
+    const title = computed(() => {
+      if (user !== null) {
+        if (tenant.value === "Standard") {
+          return "SportIQ Connect (Standard)";
+        } else if (tenant.value !== "Free") {
+          return "SportIQ Connect - " + tenant.value;
+        } else {
+          return "SportIQ Connect";
+        }
+      } else {
+        return "SportIQ Connect";
+      }
+    });
+
     return {
       toggleTheme,
       xs,
@@ -73,6 +89,7 @@ export default {
       goTo,
       role,
       tenant,
+      title,
     };
   },
 };
