@@ -39,7 +39,7 @@ export default {
     const user = auth.currentUser;
     const role = ref("");
 
-    user?.getIdTokenResult().then((res) => {
+    user?.getIdTokenResult(true).then((res) => {
       if (res.claims.role) {
         role.value = "" + res.claims.role;
       }
