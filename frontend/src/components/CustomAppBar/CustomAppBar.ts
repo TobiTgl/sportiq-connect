@@ -38,10 +38,12 @@ export default {
     const auth = getAuth();
     const user = auth.currentUser;
     const role = ref("");
+    const tenant = ref("");
 
     user?.getIdTokenResult(true).then((res) => {
       if (res.claims.role) {
         role.value = "" + res.claims.role;
+        tenant.value = "" + res.claims.tenant;
       }
     });
 
@@ -70,6 +72,7 @@ export default {
       handleLogout,
       goTo,
       role,
+      tenant,
     };
   },
 };

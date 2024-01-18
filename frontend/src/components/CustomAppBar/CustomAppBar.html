@@ -11,7 +11,8 @@
   />
 
   <v-app-bar-title style="cursor: pointer" @click.prevent="$router.push('/')">
-    SportIQ Connect
+    SportIQ Connect {{ (tenant !== 'Free') ? (tenant !== 'Standard' ? '- ' +
+    tenant : '(Standard)') : '' }}
   </v-app-bar-title>
 
   <v-menu v-if="!xs && user">
@@ -102,7 +103,7 @@
     />
 
     <v-list-item
-      v-if="user && (role === 'Admin')"
+      v-if="user && (role === 'Admin') && (tenant !== 'Free') && (tenant !== 'Standard')"
       title="Administration"
       prepend-icon="mdi-account-cog-outline"
       link

@@ -50,28 +50,19 @@ const msg = ref("");
 const showMsg = ref(false);
 const msgType = ref<"success" | "error">("success");
 
-onBeforeMount(() => {
-  user
+onBeforeMount(async () => {
+  subscription.value = "" + (await user?.getIdTokenResult(true))?.claims.tenant;
+
+  await user
     ?.getIdToken()
     .then((token) => {
-      axios
-        .get(getBackendUrl() + "/auth/gettenant", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (typeof res.data !== typeof "") {
-            throw new Error("Invalid response from backend");
-          } else {
-            subscription.value = res.data;
-            loading.value = false;
-          }
-        });
       axios
         .get(getBackendUrl() + "/auth/gettenant/list", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           availableTenants.value = res.data;
+          loading.value = false;
         })
         .catch((error) => {
           console.log(error);
@@ -99,13 +90,19 @@ const setTenant = () => {
           }
         )
         .then(() => {
-          msg.value = "Tenant successfully updated!";
+          msg.value = "Tenant successfully updated! Page reload in 3 sec...";
           msgType.value = "success";
           showMsg.value = true;
-          loading.value = false;
           setTimeout(() => {
-            showMsg.value = false;
-          }, 4000);
+            msg.value = "Tenant successfully updated! Page reload in 2 sec...";
+          }, 1000);
+          setTimeout(() => {
+            msg.value = "Tenant successfully updated! Page reload in 1 sec...";
+          }, 2000);
+          setTimeout(() => {
+            msg.value = "Tenant successfully updated! Page reload in 0 sec...";
+            window.location.reload();
+          }, 3000);
         })
         .catch((error) => {
           console.log(error.response.data.message);
