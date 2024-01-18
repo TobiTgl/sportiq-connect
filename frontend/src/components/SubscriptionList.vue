@@ -112,7 +112,6 @@ if (user) {
         })
         .then((res) => {
           const subscription = res.data;
-          console.log(subscription);
           if (subscription === "Free") {
             subscriptions.value[0].currentPlan = true;
             subscriptions.value[1].currentPlan = false;
@@ -121,7 +120,7 @@ if (user) {
             subscriptions.value[0].currentPlan = false;
             subscriptions.value[1].currentPlan = true;
             subscriptions.value[2].currentPlan = false;
-          } else if (subscription === "Enterprise") {
+          } else {
             subscriptions.value[0].currentPlan = false;
             subscriptions.value[1].currentPlan = false;
             subscriptions.value[2].currentPlan = true;
