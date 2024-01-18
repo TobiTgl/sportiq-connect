@@ -54,6 +54,11 @@ export class AuthController {
     return user?.tenant;
   }
 
+  @Get('gettenant/list')
+  getTenantList(@Req() req): Promise<Array<String>> {
+    return this.service.getTenantList();
+  }
+
   @Post('users/create')
   createUser(@Req() req, @Body() body): Promise<UserInfo> {
     const user: DecodedIdToken = req.user;

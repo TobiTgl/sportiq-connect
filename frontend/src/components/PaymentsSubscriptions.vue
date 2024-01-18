@@ -14,7 +14,7 @@
         <v-col cols="3">
           <v-select
             label="Current subscription"
-            :items="['Free', 'Standard', 'Enterprise']"
+            :items="availableTenants"
             v-model="subscription"
           />
         </v-col>
@@ -37,33 +37,50 @@ import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
 import { getBackendUrl } from "@/helpers/helpers";
+import { onBeforeMount } from "vue";
 
 const auth = getAuth();
 const user = auth.currentUser;
 
-const subscription = ref("Free");
+const availableTenants = ref([]);
+const subscription = ref("");
 const loading = ref(true);
 
 const msg = ref("");
 const showMsg = ref(false);
 const msgType = ref<"success" | "error">("success");
 
-user
-  ?.getIdToken()
-  .then((token) => {
-    axios
-      .get(getBackendUrl() + "/auth/gettenant", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        subscription.value = res.data;
-        loading.value = false;
-      });
-  })
-  .catch((error) => {
-    console.log(error);
-    loading.value = false;
-  });
+onBeforeMount(() => {
+  user
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .get(getBackendUrl() + "/auth/gettenant", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          if (typeof res.data !== typeof "") {
+            throw new Error("Invalid response from backend");
+          } else {
+            subscription.value = res.data;
+            loading.value = false;
+          }
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      loading.value = false;
+    });
+
+  axios
+    .get(getBackendUrl() + "/auth/gettenant/list")
+    .then((res) => {
+      availableTenants.value = res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
 const setTenant = () => {
   loading.value = true;

@@ -122,4 +122,10 @@ export class AuthService {
 
     return userInfoList;
   }
+
+  public async getTenantList(): Promise<Array<String>> {
+    return (await admin.auth().tenantManager().listTenants()).tenants.map(
+      (tenant) => tenant.displayName,
+    );
+  }
 }
