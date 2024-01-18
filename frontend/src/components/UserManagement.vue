@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="userList"
       :loading="loading"
       :sort-by="[{ key: 'name', order: 'asc' }]"
     >
@@ -68,6 +68,7 @@
                   color="primary"
                   :disabled="!isValid"
                   @click.prevent="createUser"
+                  :loading="loading"
                 >
                   Create
                 </v-btn>
@@ -110,7 +111,12 @@
 </template>
 
 <script setup lang="ts">
+import { getAuth } from "firebase/auth";
+const auth = getAuth();
+import axios from "axios";
 import { ref } from "vue";
+import { getBackendUrl } from "@/helpers/helpers";
+import { onBeforeMount } from "vue";
 const loading = ref(true);
 
 const showDialog = ref(false);
@@ -154,7 +160,7 @@ const headers = [
   },
 ];
 
-const items = ref<
+const userList = ref<
   Array<{
     userId: string;
     name: string;
@@ -164,41 +170,58 @@ const items = ref<
 >([]);
 
 // TODO: fetch users from backend
-items.value = [
-  {
-    userId: "1",
-    name: "User 1",
-    email: "user1@email.de",
-    role: "Athlete",
-  },
-  {
-    userId: "2",
-    name: "User 2",
-    email: "user2@email.de",
-    role: "Athlete",
-  },
-  {
-    userId: "3",
-    name: "User 3",
-    email: "user3@email.de",
-    role: "Admin",
-  },
-  {
-    userId: "4",
-    name: "User 4",
-    email: "user4@email.de",
-    role: "Athlete",
-  },
-];
-loading.value = false;
+onBeforeMount(() => {
+  auth.currentUser
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .get(getBackendUrl() + "/auth/users", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          console.log(response.data);
+          userList.value = response.data;
+          loading.value = false;
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
-function createUser() {
-  // TODO: reset password
+async function createUser() {
   loading.value = true;
-  console.log("create user: ", name.value, email.value, role.value);
 
-  showDialog.value = false;
-  loading.value = false;
+  await auth.currentUser
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .post(
+          getBackendUrl() + "/auth/users/create",
+          {
+            name: name.value,
+            email: email.value,
+            role: role.value,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          userList.value.push({
+            userId: response.data.userId,
+            name: response.data.name,
+            email: response.data.email,
+            role: response.data.role,
+          });
+
+          showDialog.value = false;
+          loading.value = false;
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 function copyToClipboard() {
