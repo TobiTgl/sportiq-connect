@@ -21,20 +21,20 @@
 
     <template v-else>
       <v-tabs v-model="tab" color="primary" class="mb-3" stacked>
-        <v-tab value="UserManagement">
+        <v-tab value="user-management" @click.prevent="path('')">
           <v-icon>mdi-account</v-icon>
           User Management
         </v-tab>
-        <v-tab value="Customization">
+        <v-tab value="customization" @click.prevent="path('customization')">
           <v-icon>mdi-shape-outline</v-icon>
           Customization
         </v-tab>
       </v-tabs>
       <v-window v-model="tab">
-        <v-window-item value="UserManagement">
+        <v-window-item value="user-management">
           <user-management />
         </v-window-item>
-        <v-window-item value="Customization">
+        <v-window-item value="customization">
           <customization />
         </v-window-item>
       </v-window>
@@ -49,7 +49,7 @@ import { ref } from "vue";
 import UserManagement from "@/components/UserManagement.vue";
 import Customization from "@/components/Customization.vue";
 import { onBeforeMount } from "vue";
-const tab = ref("UserManagement");
+const tab = ref(window.location.hash.replace("#", ""));
 
 const loading = ref(true);
 const role = ref("");
@@ -67,6 +67,10 @@ onBeforeMount(async () => {
     loading.value = false;
   }
 });
+
+function path(path: string) {
+  window.location.hash = path;
+}
 </script>
 
 <style lang="scss"></style>
