@@ -186,7 +186,7 @@ export class AdministrationService {
     return await userRef.get().catch((error) => {
       this.logger.error(error);
       throw new HttpException(
-        `Couldn't get user`,
+        `Couldn't get data`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     });
@@ -194,5 +194,39 @@ export class AdministrationService {
 
   public async hello(userId: string, tenantId: String): Promise<String> {
     return `Hello! I am the analysis administration.\nYour userId is: ${userId}\nYour tenantId is: ${tenantId}\n`;
+  }
+
+  public async getTheme(tenant: string): Promise<String> {
+    const docRef = this.firestore
+      .collection('administration-themes')
+      .doc(tenant);
+
+    const doc = await this.getUser(docRef);
+
+    if (doc.data() !== undefined) {
+      return doc.data().customColor;
+    } else {
+      return '#48A9A6';
+    }
+  }
+
+  public async setTheme(tenant: string, color: string): Promise<Boolean> {
+    const docRef = this.firestore
+      .collection('administration-themes')
+      .doc(tenant.toLowerCase());
+
+    await docRef
+      .set({
+        customColor: color,
+      })
+      .catch((error) => {
+        this.logger.error(error);
+        throw new HttpException(
+          'Setting theme color failed',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+    this.logger.log('Set theme color for tenant ' + tenant + ' to ' + color);
+    return true;
   }
 }
