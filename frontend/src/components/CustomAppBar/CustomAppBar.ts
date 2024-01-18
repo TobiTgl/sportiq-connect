@@ -37,6 +37,13 @@ export default {
 
     const auth = getAuth();
     const user = auth.currentUser;
+    const role = ref("");
+
+    user?.getIdTokenResult().then((res) => {
+      if (res.claims.role) {
+        role.value = "" + res.claims.role;
+      }
+    });
 
     const handleLogout = async () => {
       await signOut(auth)
@@ -62,6 +69,7 @@ export default {
       user,
       handleLogout,
       goTo,
+      role,
     };
   },
 };

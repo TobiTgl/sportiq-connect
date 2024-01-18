@@ -102,7 +102,7 @@
     />
 
     <v-list-item
-      v-if="user && user.isAdmin"
+      v-if="user && (role === 'Admin')"
       title="Administration"
       prepend-icon="mdi-account-cog-outline"
       link
