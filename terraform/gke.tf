@@ -110,8 +110,8 @@ resource "kubernetes_secret" "tls_secret_company" {
   }
 
   data = {
-    "tls.crt" = "${base64decode(var.tls_crt)}"
-    "tls.key" = "${base64decode(var.tls_key)}"
+    "tls.crt" = "${base64decode(var.tls_crt_company)}"
+    "tls.key" = "${base64decode(var.tls_key_company)}"
   }
 
   type = "kubernetes.io/tls"

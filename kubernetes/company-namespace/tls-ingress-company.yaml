@@ -12,7 +12,7 @@ spec:
   tls:
   - hosts:
       - company.sportiq-connect.de
-    secretName: tls-secret
+    secretName: tls-secret-company
   rules:
   - host: company.sportiq-connect.de
     http:

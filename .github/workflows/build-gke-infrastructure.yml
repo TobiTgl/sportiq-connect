@@ -51,6 +51,8 @@ jobs:
           TF_VAR_env: ${{ github.event.inputs.env }}
           TF_VAR_tls_crt: ${{ secrets.TLS_CRT }}
           TF_VAR_tls_key: ${{ secrets.TLS_KEY }}
+          TF_VAR_tls_crt_company: ${{ secrets.TLS_CRT_COMPANY }}
+          TF_VAR_tls_key_company: ${{ secrets.TLS_KEY_COMPANY }}
 
       - id: run
         name: Terraform apply/destroy
@@ -69,3 +71,5 @@ jobs:
           TF_VAR_env: ${{ github.event.inputs.env }}
           TF_VAR_tls_crt: ${{ secrets.TLS_CRT }}
           TF_VAR_tls_key: ${{ secrets.TLS_KEY }}
+          TF_VAR_tls_crt_company: ${{ secrets.TLS_CRT_COMPANY }}
+          TF_VAR_tls_key_company: ${{ secrets.TLS_KEY_COMPANY }}
