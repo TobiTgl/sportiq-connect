@@ -94,7 +94,7 @@
 
         <v-tooltip text="Delete user" location="top">
           <template v-slot:activator="{ props }">
-            <v-icon v-bind="props" @click="deleteUser(item.userId)">
+            <v-icon v-bind="props" @click="deleteUser(item)">
               mdi-delete
             </v-icon>
           </template>
@@ -169,7 +169,6 @@ const userList = ref<
   }>
 >([]);
 
-// TODO: fetch users from backend
 onBeforeMount(() => {
   auth.currentUser
     ?.getIdToken()
@@ -179,7 +178,6 @@ onBeforeMount(() => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          console.log(response.data);
           userList.value = response.data;
           loading.value = false;
         });
@@ -228,12 +226,25 @@ function copyToClipboard() {
   navigator.clipboard.writeText(password.value);
 }
 
-function deleteUser(userId: string) {
-  // TODO: delete user
+async function deleteUser(item: any) {
   loading.value = true;
-  console.log("delete user:", userId);
 
-  loading.value = false;
+  await auth.currentUser
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .delete(getBackendUrl() + "/auth/users/delete/" + item.userId, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          const index = userList.value.indexOf(item);
+          userList.value.splice(index, 1);
+          loading.value = false;
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 function resetPassword(userId: string) {

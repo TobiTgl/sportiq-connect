@@ -9,6 +9,7 @@ import {
   Body,
   UnauthorizedException,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
@@ -78,8 +79,8 @@ export class AuthController {
     return this.service.createUser(body.name, body.email, body.role, tenantId);
   }
 
-  @Delete('users/delete')
-  deleteUser(@Req() req, @Body() body): Promise<Boolean> {
+  @Delete('users/delete/:id')
+  deleteUser(@Req() req, @Param() param): Promise<Boolean> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
     const userRole = user?.role;
@@ -94,7 +95,7 @@ export class AuthController {
       throw new UnauthorizedException('Only admins can delete users');
     }
 
-    return this.service.deleteUser(body.userId);
+    return this.service.deleteUser(param.id);
   }
 
   @Get('users')
