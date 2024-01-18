@@ -66,19 +66,20 @@ onBeforeMount(() => {
             loading.value = false;
           }
         });
+      axios
+        .get(getBackendUrl() + "/auth/gettenant/list", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          availableTenants.value = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })
     .catch((error) => {
       console.log(error);
       loading.value = false;
-    });
-
-  axios
-    .get(getBackendUrl() + "/auth/gettenant/list")
-    .then((res) => {
-      availableTenants.value = res.data;
-    })
-    .catch((error) => {
-      console.log(error);
     });
 });
 
@@ -88,7 +89,7 @@ const setTenant = () => {
     ?.getIdToken()
     .then((token) => {
       axios
-        .post(
+        .patch(
           getBackendUrl() + "/auth/settenant",
           {
             tenant: subscription.value,
