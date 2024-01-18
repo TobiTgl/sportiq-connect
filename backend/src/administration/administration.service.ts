@@ -208,4 +208,24 @@ export class AdministrationService {
       return '#48A9A6';
     }
   }
+
+  public async setTheme(tenant: string, color: string): Promise<Boolean> {
+    const docRef = this.firestore
+      .collection('administration-themes')
+      .doc(tenant.toLowerCase());
+
+    await docRef
+      .set({
+        customColor: color,
+      })
+      .catch((error) => {
+        this.logger.error(error);
+        throw new HttpException(
+          'Setting theme color failed',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+    this.logger.log('Set theme color for tenant ' + tenant + ' to ' + color);
+    return true;
+  }
 }

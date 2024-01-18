@@ -31,7 +31,10 @@
 </template>
 
 <script setup lang="ts">
+import { getBackendUrl } from "@/helpers/helpers";
 import vuetify from "@/plugins/vuetify";
+import axios from "axios";
+import { getAuth } from "firebase/auth";
 import { ref } from "vue";
 
 const logo = ref();
@@ -43,7 +46,6 @@ const mode = ref<"hsla" | "rgb" | "rgba" | "hsl" | "hex" | "hexa" | undefined>(
 const modes = ref(["hsla", "rgba", "hexa"]);
 
 function reset() {
-  // Todo: update the logo
   logo.value = undefined;
   color.value = currentColor.value;
 }
@@ -53,8 +55,26 @@ function updateLogo() {
   console.log(logo.value);
 }
 
-function updateColor() {
-  // Todo: update the color
-  console.log(color.value);
+async function updateColor() {
+  const token = await getAuth().currentUser?.getIdToken();
+
+  await axios
+    .post(
+      getBackendUrl() + "/administration/theme",
+      {
+        color: color.value,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      throw error;
+    });
 }
 </script>

@@ -73,4 +73,24 @@ export class AdministrationController {
 
     return this.service.getTheme(tenant);
   }
+
+  @Post('theme')
+  @UseGuards(AuthGuard)
+  setTheme(@Req() req, @Body() body): Promise<Boolean> {
+    const user: DecodedIdToken = req.user;
+    const tenant = user?.tenant;
+    const userRole = user?.role;
+
+    if (tenant === 'Free' || tenant === 'Standard') {
+      throw new UnauthorizedException(
+        'Only enterprise tenants can set a custom theme',
+      );
+    }
+
+    if (userRole !== 'Admin') {
+      throw new UnauthorizedException('Only admins can set a custom theme');
+    }
+
+    return this.service.setTheme(tenant, body.color);
+  }
 }
