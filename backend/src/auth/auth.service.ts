@@ -126,4 +126,17 @@ export class AuthService {
       (tenant) => tenant.displayName,
     );
   }
+
+  public async resetPassword(userId: string): Promise<Boolean> {
+    await admin
+      .auth()
+      .updateUser(userId, {
+        password: 'SiqC@' + new Date().getFullYear(),
+      })
+      .catch((error) => {
+        this.logger.error('Error resetting password: ' + error);
+        throw new BadRequestException(error);
+      });
+    return true;
+  }
 }

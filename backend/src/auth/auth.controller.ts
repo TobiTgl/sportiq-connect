@@ -10,6 +10,7 @@ import {
   UnauthorizedException,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { AUTH_SERVICE_URL } from './auth.pb';
 import { AuthService } from './auth.service';
@@ -113,5 +114,24 @@ export class AuthController {
     }
 
     return this.service.getUsers(tenantId);
+  }
+
+  @Patch('users/reset/:id')
+  resetPassword(@Req() req, @Param() param): Promise<Boolean> {
+    const user: DecodedIdToken = req.user;
+    const tenantId = user?.tenant;
+    const userRole = user?.role;
+
+    if (tenantId === 'Free' || tenantId === 'Standard') {
+      throw new UnauthorizedException(
+        'Only enterprise tenants can reset passwords',
+      );
+    }
+
+    if (userRole !== 'Admin') {
+      throw new UnauthorizedException('Only admins can reset passwords');
+    }
+
+    return this.service.resetPassword(param.id);
   }
 }
