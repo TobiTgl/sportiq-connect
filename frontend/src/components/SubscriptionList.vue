@@ -46,7 +46,7 @@ import SubscriptionCard from "@/components/SubscriptionCard.vue";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -107,7 +107,7 @@ if (user) {
     ?.getIdToken()
     .then((token) => {
       axios
-        .get(getBackendUrl() + "/auth/gettenant", {
+        .get(getAuthServiceUrl() + "/auth/gettenant", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
