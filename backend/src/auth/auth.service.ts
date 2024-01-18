@@ -45,6 +45,15 @@ export class AuthService {
         );
         throw new BadRequestException(error);
       });
+
+    this.logger.log(
+      'Set tenant and role for user ' +
+        userId +
+        ': ' +
+        tenantName +
+        ', ' +
+        role,
+    );
   }
 
   public async createUser(
