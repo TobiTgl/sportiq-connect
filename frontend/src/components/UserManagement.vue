@@ -247,12 +247,23 @@ async function deleteUser(item: any) {
     });
 }
 
-function resetPassword(userId: string) {
+async function resetPassword(userId: string) {
   // TODO: reset password
   loading.value = true;
-  console.log("reset password", userId);
-
-  loading.value = false;
+  await auth.currentUser
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .patch(getBackendUrl() + "/auth/users/reset/" + userId, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          loading.value = false;
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 </script>
 
