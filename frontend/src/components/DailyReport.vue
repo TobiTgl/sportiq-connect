@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="text-center report-container">
-    <h2>Reports created in the last 24 hours:</h2>
-    <h2 class="number">{{ displayedReport }}</h2>
+    <h3>Reports created in the last 24 hours:</h3>
+    <h3 class="number">{{ displayedReport }}</h3>
   </v-container>
 </template>
 
@@ -47,27 +47,23 @@ onBeforeMount(async () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log(res.data);
         dailyReport.value = res.data;
       })
-      .catch((error) => {
-        // error handling when Strava auth data could not be saved
-        console.log(error);
-      });
+      .catch((error) => {});
   });
 });
 </script>
 <style>
 .number {
   color: #48a9a6; /* Vue green */
-  font-size: 3em;
+  font-size: 2em;
 }
 .report-container {
   background-color: #f9f9f9; /* Light gray background */
   border: 1px solid #ddd; /* Gray border */
   border-radius: 10px; /* Rounded corners */
   padding: 20px; /* Some padding */
-  max-width: 600px; /* Maximum width */
+  max-width: 30%; /* Maximum width */
   margin: 0 auto; /* Center the container */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
 }
