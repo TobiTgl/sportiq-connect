@@ -2,7 +2,6 @@
   <v-container fluid class="text-center report-container">
     <h2>Reports created in the last 24 hours:</h2>
     <h2 class="number">{{ displayedReport }}</h2>
-    <h2 class="number">{{ tweened.number.toFixed(0) }}</h2>
   </v-container>
 </template>
 
@@ -11,7 +10,7 @@ import { useDisplay } from "vuetify";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
 import { getReportServiceUrl } from "@/helpers/helpers";
-import { onBeforeMount, reactive, ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 
 const { xs, smAndDown } = useDisplay();
 const dailyReport = ref(0);
@@ -19,9 +18,6 @@ const displayedReport = ref(0);
 
 const auth = getAuth();
 const user = auth.currentUser;
-const tweened = reactive({
-  number: 0,
-});
 
 watch(dailyReport, (newVal, oldVal) => {
   const duration = 2000;
@@ -52,7 +48,7 @@ onBeforeMount(async () => {
       })
       .then((res) => {
         console.log(res.data);
-        dailyReport.value = 100;
+        dailyReport.value = res.data;
       })
       .catch((error) => {
         // error handling when Strava auth data could not be saved
