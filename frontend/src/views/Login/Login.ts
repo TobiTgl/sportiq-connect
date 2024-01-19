@@ -5,7 +5,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import router from "@/router";
 import { ref } from "vue";
 import axios from "axios";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAdministrationServiceUrl } from "@/helpers/helpers";
 
 export default {
   name: "Login",
@@ -77,7 +77,7 @@ export default {
 
       auth.currentUser?.getIdToken().then((token) => {
         axios
-          .get(`${getBackendUrl()}/administration/getStravaId`, {
+          .get(`${getAdministrationServiceUrl()}/administration/getStravaId`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {

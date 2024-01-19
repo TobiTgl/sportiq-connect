@@ -1,4 +1,4 @@
-<v-app-bar class="custom-app-bar">
+<v-app-bar class="custom-app-bar" :color="user ? 'secondary' : ''">
   <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
   <img
@@ -11,7 +11,7 @@
   />
 
   <v-app-bar-title style="cursor: pointer" @click.prevent="$router.push('/')">
-    SportIQ Connect
+    {{ title }}
   </v-app-bar-title>
 
   <v-menu v-if="!xs && user">
@@ -80,25 +80,36 @@
 
   <v-divider class="mt-5"></v-divider>
 
-  <v-list>
-    <v-list-item
-      v-for="item in features"
-      :key="item.title"
-      :title="item.title"
-      :prepend-icon="item.icon"
-      link
-      router
-      :to="{ name: item.route }"
-    />
+  <v-list color="primary">
+    <template v-for="item in features">
+      <v-list-item
+        :key="item.title"
+        :title="item.title"
+        :prepend-icon="item.icon"
+        v-if="(user !== null) === item.needsAuth || item.needsAuth === false"
+        link
+        router
+        :to="{ name: item.route }"
+      />
+    </template>
   </v-list>
 
   <v-divider class="mt-5"></v-divider>
 
-  <v-list nav>
+  <v-list color="primary">
     <v-list-item
       :title="themeTitle"
       prepend-icon="mdi-theme-light-dark"
       @click="toggleTheme"
+    />
+
+    <v-list-item
+      v-if="user && (role === 'Admin') && (tenant !== 'Free') && (tenant !== 'Standard')"
+      title="Administration"
+      prepend-icon="mdi-account-cog-outline"
+      link
+      router
+      :to="{ name: 'Admin'}"
     />
   </v-list>
 </v-navigation-drawer>

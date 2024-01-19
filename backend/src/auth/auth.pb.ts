@@ -11,3 +11,10 @@ export interface AuthServiceClient {
 export interface AuthServiceController {
   hello(): Promise<String>;
 }
+
+export interface UserInfo {
+  userId: string;
+  name: string;
+  email: string;
+  role: string;
+}

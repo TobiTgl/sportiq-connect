@@ -19,7 +19,8 @@ export class AuthGuard implements CanActivate {
     if (isDev) {
       request['user'] = {
         name: 'Dev User',
-        tenant: 'Free',
+        tenant: 'Company',
+        role: 'Admin',
         email: 'max@mustermann.de',
         uid: 'ufDIBgds93WAN4EdXWFDbAWt9Es1',
       };

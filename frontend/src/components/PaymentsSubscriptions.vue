@@ -14,7 +14,7 @@
         <v-col cols="3">
           <v-select
             label="Current subscription"
-            :items="['Free', 'Standard', 'Enterprise']"
+            :items="availableTenants"
             v-model="subscription"
           />
         </v-col>
@@ -36,34 +36,43 @@
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
+import { onBeforeMount } from "vue";
 
 const auth = getAuth();
 const user = auth.currentUser;
 
-const subscription = ref("Free");
+const availableTenants = ref([]);
+const subscription = ref("");
 const loading = ref(true);
 
 const msg = ref("");
 const showMsg = ref(false);
 const msgType = ref<"success" | "error">("success");
 
-user
-  ?.getIdToken()
-  .then((token) => {
-    axios
-      .get(getBackendUrl() + "/auth/gettenant", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        subscription.value = res.data;
-        loading.value = false;
-      });
-  })
-  .catch((error) => {
-    console.log(error);
-    loading.value = false;
-  });
+onBeforeMount(async () => {
+  subscription.value = "" + (await user?.getIdTokenResult(true))?.claims.tenant;
+
+  await user
+    ?.getIdToken()
+    .then((token) => {
+      axios
+        .get(getAuthServiceUrl() + "/auth/gettenant/list", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          availableTenants.value = res.data;
+          loading.value = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      loading.value = false;
+    });
+});
 
 const setTenant = () => {
   loading.value = true;
@@ -71,8 +80,8 @@ const setTenant = () => {
     ?.getIdToken()
     .then((token) => {
       axios
-        .post(
-          getBackendUrl() + "/auth/settenant",
+        .patch(
+          getAuthServiceUrl() + "/auth/settenant",
           {
             tenant: subscription.value,
           },
@@ -81,13 +90,19 @@ const setTenant = () => {
           }
         )
         .then(() => {
-          msg.value = "Tenant successfully updated!";
+          msg.value = "Tenant successfully updated! Page reload in 3 sec...";
           msgType.value = "success";
           showMsg.value = true;
-          loading.value = false;
           setTimeout(() => {
-            showMsg.value = false;
-          }, 4000);
+            msg.value = "Tenant successfully updated! Page reload in 2 sec...";
+          }, 1000);
+          setTimeout(() => {
+            msg.value = "Tenant successfully updated! Page reload in 1 sec...";
+          }, 2000);
+          setTimeout(() => {
+            msg.value = "Tenant successfully updated! Page reload in 0 sec...";
+            window.location.reload();
+          }, 3000);
         })
         .catch((error) => {
           console.log(error.response.data.message);
