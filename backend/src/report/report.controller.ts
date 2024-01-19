@@ -5,7 +5,6 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 import { AuthGuard } from 'src/auth/auth.gard';
 
 @Controller(REPORT_SERVICE_URL)
-@UseGuards(AuthGuard)
 export class ReportController {
   @Inject(ReportService)
   private readonly service: ReportService;
@@ -18,18 +17,19 @@ export class ReportController {
     return this.service.hello(userId, tenantId);
   }
 
+  @Get('dailyreport')
+  dailyreport(): Promise<String> {
+    return this.service.dailyreport();
+  }
+
   @Get('all')
-  getAll(@Req() req): Promise<Array<Object>> {
+    getAll(@Req() req): Promise<Array<Object>> {
     return this.service.getAll();
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   getSingleReport(@Req() req, @Param() params: any): Promise<Object> {
     return this.service.getSingleReport(params.id);
-  }
-
-  @Get('dailyreport')
-  dailyreport(): Promise<String> {
-    return this.service.dailyreport();
   }
 }

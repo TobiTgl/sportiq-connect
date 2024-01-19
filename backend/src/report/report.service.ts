@@ -90,9 +90,6 @@ export class ReportService {
     const start = new Date();
     start.setTime(end.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours from the current time
 
-    console.log(start);
-    console.log(end);
-
     const reportRef = this.firestore
       .collection('report-service')
       .where('timestamp', '>=', start)
@@ -107,7 +104,7 @@ export class ReportService {
     });
 
     const newDailyReport = this.firestore
-      .collection('report-service')
+      .collection('daily-report')
       .doc(end.toISOString());
 
     await newDailyReport
@@ -123,7 +120,12 @@ export class ReportService {
         );
       });
 
-    console.log(reports.size);
+    this.logger.log(
+      'Created daily report at ' +
+        end.toISOString() +
+        ' number of reports from the last 24h: ' +
+        reports.size,
+    );
     return 'Report created';
   }
 }
