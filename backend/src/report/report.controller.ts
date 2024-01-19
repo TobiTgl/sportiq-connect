@@ -17,13 +17,18 @@ export class ReportController {
     return this.service.hello(userId, tenantId);
   }
 
+  @Post('dailyreport')
+  createDailyreport(): Promise<String> {
+    return this.service.createDailyReport();
+  }
+
   @Get('dailyreport')
-  dailyreport(): Promise<String> {
-    return this.service.dailyreport();
+  getDailyreport(): Promise<String> {
+    return this.service.getDailyReport();
   }
 
   @Get('all')
-    getAll(@Req() req): Promise<Array<Object>> {
+  getAll(@Req() req): Promise<Array<Object>> {
     return this.service.getAll();
   }
 

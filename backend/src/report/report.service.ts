@@ -85,7 +85,28 @@ export class ReportService {
     };
   }
 
-  public async dailyreport(): Promise<String> {
+  public async getDailyReport(): Promise<String> {
+    const end = new Date();
+    const start = new Date();
+    end.setUTCHours(23, 59, 59, 999); // Set the time to the end of today
+    start.setUTCHours(0, 0, 0, 0);
+
+    const dailyReportRef = this.firestore
+      .collection('daily-report')
+      .where('timestamp', '>=', start)
+      .where('timestamp', '<=', end);
+
+    const reports = await dailyReportRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get report`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+    return reports.docs[0].data().reports;
+  }
+
+  public async createDailyReport(): Promise<String> {
     const end = new Date();
     const start = new Date();
     start.setTime(end.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours from the current time

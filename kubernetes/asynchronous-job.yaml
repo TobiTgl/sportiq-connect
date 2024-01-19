@@ -15,5 +15,5 @@ spec:
             command:
             - /bin/sh
             - -c
-            - 'curl -f http://report-service:4003/report/dailyreport'
+            - 'curl -f -X POST http://report-service:4003/report/dailyreport'
           restartPolicy: OnFailure

@@ -1,5 +1,6 @@
 import { useDisplay } from "vuetify";
 import SubscriptionList from "@/components/SubscriptionList.vue";
+import DailyReport from "@/components/DailyReport.vue";
 
 export default {
   name: "Home",
@@ -8,6 +9,7 @@ export default {
   },
   components: {
     "subscription-list": SubscriptionList,
+    "daily-report": DailyReport,
   },
   setup() {
     const { xs, smAndDown } = useDisplay();
