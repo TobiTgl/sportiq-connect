@@ -1,7 +1,6 @@
-import { getBackendUrl } from "@/helpers/helpers";
+import { getReportServiceUrl } from "@/helpers/helpers";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
-import { start } from "repl";
 import { ref } from "vue";
 import { useDate } from "vuetify";
 
@@ -15,7 +14,6 @@ export default {
   setup() {
     const dateConverter = useDate();
     const user = getAuth().currentUser;
-    const backendUrl = getBackendUrl();
     const notConnected = ref(false);
     const listOfActivities = ref<Array<any>>();
     const length = ref(0);
@@ -31,7 +29,7 @@ export default {
       alertMessage.value = "Getting activities...";
       showAlert.value = true;
       const url =
-        `${backendUrl}/analysis/activities` +
+        `${getReportServiceUrl()}/analysis/activities` +
         (startDate.value !== undefined
           ? "?after=" + new Date(startDate.value).getTime() / 1000
           : "") +
