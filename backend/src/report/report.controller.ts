@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
