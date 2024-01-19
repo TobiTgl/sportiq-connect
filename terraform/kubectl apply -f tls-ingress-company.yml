@@ -1,0 +1,11 @@
+kubectl apply -f ./company-namespace/tls-ingress-company.yaml
+kubectl apply -f ./company-namespace/auth-service/auth-deployment.yaml
+kubectl apply -f ./company-namespace/auth-service/auth-service.yaml
+kubectl apply -f ./company-namespace/administration-service/administration-deployment.yaml
+kubectl apply -f ./company-namespace/administration-service/administration-service.yaml
+kubectl apply -f ./company-namespace/report-service/report-deployment.yaml
+kubectl apply -f ./company-namespace/report-service/report-service.yaml
+kubectl apply -f ./company-namespace/frontend-deployment-company.yaml
+kubectl apply -f ./company-namespace/frontend-service-company.yaml
+
+kubectl autoscale deployment administration-deployment --cpu-percent=50 --min=2 --max=3
