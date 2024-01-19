@@ -8,7 +8,7 @@
         <br>
         Team: Sahin Karakoc, Tobias Toegel, Nick Nowak
     </p>
-    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Nick Nowak/cloud-project/build.yml">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/HTWG-Nowak/cloud-project/build-and-push-image.yml">
 </div>
 <br/>
 <br/>

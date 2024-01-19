@@ -9,7 +9,7 @@ import {
 import router from "@/router";
 import { ref } from "vue";
 import axios from "axios";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
 
 export default {
   name: "Register",
@@ -73,7 +73,7 @@ export default {
             .then(() => {
               userCredential.user.getIdToken().then((token) => {
                 axios.post(
-                  getBackendUrl() + "/auth/settenant",
+                  getAuthServiceUrl() + "/auth/settenant",
                   {
                     tenant: "Free",
                   },

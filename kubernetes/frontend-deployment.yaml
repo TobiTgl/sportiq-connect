@@ -7,15 +7,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud-project
+      app: frontend-service
   template:
     metadata:
       labels:
-        app: cloud-project
+        app: frontend-service
     spec:
       containers:
         - name: frontend
-          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-frontend:v0.1
+          image: europe-west3-docker.pkg.dev/quixotic-market-402317/cloud-project-registry/cloud-project-frontend:v0.3
           ports:
           - containerPort: 3000
       imagePullSecrets:

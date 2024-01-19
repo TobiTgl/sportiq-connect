@@ -46,7 +46,7 @@ import SubscriptionCard from "@/components/SubscriptionCard.vue";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
-import { getBackendUrl } from "@/helpers/helpers";
+import { getAuthServiceUrl } from "@/helpers/helpers";
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -107,12 +107,11 @@ if (user) {
     ?.getIdToken()
     .then((token) => {
       axios
-        .get(getBackendUrl() + "/auth/gettenant", {
+        .get(getAuthServiceUrl() + "/auth/gettenant", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           const subscription = res.data;
-          console.log(subscription);
           if (subscription === "Free") {
             subscriptions.value[0].currentPlan = true;
             subscriptions.value[1].currentPlan = false;
@@ -121,7 +120,7 @@ if (user) {
             subscriptions.value[0].currentPlan = false;
             subscriptions.value[1].currentPlan = true;
             subscriptions.value[2].currentPlan = false;
-          } else if (subscription === "Enterprise") {
+          } else {
             subscriptions.value[0].currentPlan = false;
             subscriptions.value[1].currentPlan = false;
             subscriptions.value[2].currentPlan = true;

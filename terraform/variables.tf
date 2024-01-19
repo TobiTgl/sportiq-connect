@@ -8,7 +8,7 @@ variable "client_secret" {
 
 variable "deployment_name" {
   description = "Name of deployment"
-  default = "sportiqconnect"
+  default     = "sportiqconnect"
 }
 
 variable "env" {
@@ -30,3 +30,6 @@ variable "region" {
 
 variable "tls_crt" {}
 variable "tls_key" {}
+
+variable "tls_crt_company" {}
+variable "tls_key_company" {}

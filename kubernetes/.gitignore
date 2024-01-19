@@ -3,3 +3,5 @@ backend-secret.yaml
 cert.crt
 tls.key
 tls-secret.yaml
+*.key
+*.crt
