@@ -43,7 +43,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 
 const availableTenants = ref([]);
-const subscription = ref("");
+const subscription = ref();
 const loading = ref(true);
 
 const msg = ref("");
