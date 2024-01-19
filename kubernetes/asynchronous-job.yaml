@@ -15,5 +15,5 @@ spec:
             command:
             - /bin/sh
             - -c
-            - 'curl -f http://backend-service:4000/report/dailyreport  -H "Authorization: Bearer <token>"'
+            - 'curl -f http://backend-service:4000/report/dailyreport'
           restartPolicy: OnFailure
