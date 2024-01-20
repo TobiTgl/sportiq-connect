@@ -12,7 +12,6 @@ import { createVuetify } from "vuetify";
 // fetch custom theme if on a tenant domain
 let customColor = "#48A9A6";
 if (window.location.hostname.split(".").length > 1) {
-  /*
   let subdomain = window.location.hostname.split(".")[0];
   await axios
     .get(getAdministrationServiceUrl() + "/administration/theme/" + subdomain)
@@ -21,7 +20,7 @@ if (window.location.hostname.split(".").length > 1) {
     })
     .catch((error) => {
       throw error;
-    });*/
+    });
 }
 
 export default createVuetify({
