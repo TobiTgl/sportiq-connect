@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="text-center report-container">
-    <h3>Reports created in the last 24 hours:</h3>
+    <h3>Reports created in the last 24 hours (globally)</h3>
     <h3 class="number">{{ displayedReport }}</h3>
   </v-container>
 </template>
