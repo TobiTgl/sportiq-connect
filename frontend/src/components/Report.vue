@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4" :max-width="width" flat>
+  <v-card class="mb-4" :max-width="width">
     <v-card>
       <v-card-title class="text-center"
         ><h1 class="pa-5">Report {{ data.name }}</h1></v-card-title
