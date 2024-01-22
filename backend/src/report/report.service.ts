@@ -34,7 +34,7 @@ export class ReportService {
     const after = queryParams.after ? 'after=' + queryParams.after : '';
     const before = queryParams.before ? 'before=' + queryParams.before : '';
 
-    const url = `https://www.strava.com/api/v3/athlete/activities?${before}&&${after}&&page=1&per_page=30`;
+    const url = `https://www.strava.com/api/v3/athlete/activities?${before}&&${after}&&page=1&per_page=50`;
 
     const response = await axios.get(url, {
       headers: {
@@ -180,13 +180,16 @@ export class ReportService {
 
   public async saveReport(
     userId: string,
+    tenant: string,
     body: NonNullable<unknown>,
   ): Promise<boolean> {
     const docRef = this.firestore.collection('report-service').doc();
 
     await docRef
       .set({
-        report: { body, userId },
+        userId,
+        tenant,
+        body,
       })
       .catch((error) => {
         this.logger.error(error);
@@ -195,19 +198,18 @@ export class ReportService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
-    this.logger.log('Report saved for user: ' + userId);
+    this.logger.log(
+      'Report saved for user: ' + userId + ' and tenant: ' + tenant,
+    );
     return true;
   }
 
-  public async getAllReport(userId: string): Promise<any[]> {
-    const docRef = this.firestore
-      .collection('report-service')
-      .doc(userId)
-      .collection('reports');
+  public async getAllReport(tenant: string): Promise<any[]> {
+    const docRef = this.firestore.collection('report-service');
 
     const snapshot = await docRef.get();
+
+    console.log(snapshot.docs.map((doc) => doc.data()));
     return snapshot.docs.map((doc) => doc.data());
   }
 }
-
-//,
