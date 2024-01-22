@@ -191,6 +191,7 @@ export class ReportService {
               ...body,
               username: doc.data().username,
               timestamp: doc.data().timestamp,
+              id: doc.id,
             };
           });
         }
@@ -198,6 +199,37 @@ export class ReportService {
       .catch((error) => {
         this.logger.error('Error while getting reports: ' + error);
         throw new HttpException('Error while getting reports', error.status);
+      });
+
+    return result;
+  }
+
+  public async getSingleReport(id: string): Promise<any> {
+    const docRef = this.firestore.collection('report-service').doc(id);
+
+    let result;
+    await docRef
+      .get()
+      .then((res) => {
+        if (!res.exists) {
+          result = [];
+        } else {
+          const stringBody = res.data().body.toString();
+          const body = JSON.parse(stringBody);
+          result = {
+            ...body,
+            username: res.data().username,
+            timestamp: res.data().timestamp,
+            id: res.id,
+          };
+        }
+      })
+      .catch((error) => {
+        this.logger.error('Error while getting single reports: ' + error);
+        throw new HttpException(
+          'Error while getting single reports',
+          error.status,
+        );
       });
 
     return result;

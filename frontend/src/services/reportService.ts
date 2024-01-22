@@ -27,9 +27,9 @@ export async function getAllReports() {
 
 export async function getSingleReport(id: String) {
   const auth = getAuth();
-  return await auth.currentUser?.getIdToken().then((token) => {
+  return await auth.currentUser?.getIdToken().then(async (token) => {
     return axios
-      .get(getReportServiceUrl() + `/report/${id}`, {
+      .get(getReportServiceUrl() + `/report/getSingle/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {

@@ -21,7 +21,7 @@
       v-for="item in data"
       :width="width"
       :data="item"
-      @click.prevent="() => $router.push(`/report/${item}`)"
+      @click.prevent="() => $router.push(`/report/${item.id}`)"
     />
   </vue-flex-waterfall>
 </template>
