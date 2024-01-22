@@ -205,11 +205,11 @@ export class ReportService {
   }
 
   public async getAllReport(tenant: string): Promise<any[]> {
-    const docRef = this.firestore.collection('report-service');
+    const docRef = this.firestore
+      .collection('report-service')
+      .where('tenant', '==', tenant);
 
     const snapshot = await docRef.get();
-
-    console.log(snapshot.docs.map((doc) => doc.data()));
     return snapshot.docs.map((doc) => doc.data());
   }
 }
