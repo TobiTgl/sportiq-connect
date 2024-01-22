@@ -176,7 +176,7 @@ export class AdministrationService {
         if (user.data() !== undefined) {
           id = user.data().athleteId;
         } else {
-          return null;
+          id = null;
         }
       })
       .catch((error) => {
