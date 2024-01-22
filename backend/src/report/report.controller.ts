@@ -15,7 +15,6 @@ import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
 
 @Controller(REPORT_SERVICE_URL)
-@UseGuards(AuthGuard)
 export class ReportController {
   @Inject(ReportService)
   private readonly service: ReportService;
@@ -40,6 +39,7 @@ export class ReportController {
   }
 
   @Get('create')
+  @UseGuards(AuthGuard)
   @UseGuards(StravaAccessGuard)
   createReport(@Query() queryParams: any, @Req() req): Promise<DataFrame> {
     const user: DecodedIdToken = req.user;
@@ -48,6 +48,7 @@ export class ReportController {
   }
 
   @Post('save')
+  @UseGuards(AuthGuard)
   saveReport(@Req() req, @Body() body): Promise<boolean> {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
@@ -59,6 +60,7 @@ export class ReportController {
   }
 
   @Get('getAll')
+  @UseGuards(AuthGuard)
   getAllReports(@Req() req): Promise<any[]> {
     const user: DecodedIdToken = req.user;
     const tenant = user.tenant;
