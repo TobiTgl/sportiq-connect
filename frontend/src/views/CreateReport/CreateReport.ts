@@ -12,7 +12,9 @@ export default {
   },
   setup() {
     const user = getAuth().currentUser;
-    const notConnected = ref(false);
+    const notConnected = ref(
+      localStorage.getItem("athleteId") === null ? true : false
+    );
     const listOfActivities = ref<Array<any>>();
     const length = ref(0);
     const data = ref(null);
@@ -44,12 +46,13 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          data.value = res.data;
-          if (res.status === 204) {
-            notConnected.value = true;
+          if (res.data.amountOfActivities === 0) {
             showAlert.value = false;
+            alertMessage.value = "No activities found in the given time frame";
+            alertType.value = "info";
             loading.value = false;
           } else {
+            data.value = res.data;
             listOfActivities.value = res.data;
             length.value = res.data.length;
             showAlert.value = false;
@@ -85,7 +88,6 @@ export default {
           loading.value = false;
         })
         .catch((error) => {
-          console.log(error);
           alertType.value = "error";
           alertMessage.value = error.message;
           loading.value = false;

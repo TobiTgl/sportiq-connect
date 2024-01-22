@@ -40,14 +40,33 @@ export default {
     const handleLogin = async () => {
       errorMessage.value = "";
       loading.value = true;
-      const user = await signInWithEmailAndPassword(
-        auth,
-        email.value,
-        password.value
-      )
-        .then(() => {
-          router.push({ name: "Home" });
-          loading.value = false;
+      await signInWithEmailAndPassword(auth, email.value, password.value)
+        .then((userCredentials) => {
+          userCredentials.user.getIdToken().then((token) => {
+            console.log(
+              `${getAdministrationServiceUrl()}/administration/getStravaId`
+            );
+            axios
+              .get(
+                `${getAdministrationServiceUrl()}/administration/getStravaId`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data === null) {
+                  console.log("No Strava account connected");
+                  localStorage.removeItem("athleteId");
+                } else {
+                  localStorage.setItem("athleteId", res.data);
+                }
+
+                router.push({ name: "Home" });
+                loading.value = false;
+              });
+          });
         })
         .catch((error) => {
           console.log(error.code);
@@ -74,16 +93,6 @@ export default {
           }
           loading.value = false;
         });
-
-      auth.currentUser?.getIdToken().then((token) => {
-        axios
-          .get(`${getAdministrationServiceUrl()}/administration/getStravaId`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => {
-            localStorage.setItem("athleteId", res.data);
-          });
-      });
     };
 
     return {
