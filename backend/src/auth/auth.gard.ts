@@ -15,17 +15,17 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     // Allow access in development environment
-    const isDev = process.env.NODE_ENV === 'development';
-    if (isDev) {
-      request['user'] = {
-        name: 'Dev User',
-        tenant: 'Company',
-        role: 'Admin',
-        email: 'max@mustermann.de',
-        uid: 'ufDIBgds93WAN4EdXWFDbAWt9Es1',
-      };
-      return true;
-    }
+    // const isDev = process.env.NODE_ENV === 'development';
+    // if (isDev) {
+    //   request['user'] = {
+    //     name: 'Dev User',
+    //     tenant: 'Company',
+    //     role: 'Admin',
+    //     email: 'max@mustermann.de',
+    //     uid: 'ufDIBgds93WAN4EdXWFDbAWt9Es1',
+    //   };
+    //   return true;
+    // }
 
     // check if token exists
     if (!token) {
