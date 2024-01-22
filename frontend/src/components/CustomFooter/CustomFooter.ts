@@ -6,7 +6,6 @@ export default {
 
     return {
       appVersion: pjson.version,
-      envVariable: import.meta.env.VITE_ENV,
     };
   },
 };
