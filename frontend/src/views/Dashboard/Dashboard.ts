@@ -27,7 +27,6 @@ export default {
           loading.value = false;
         });
     });
-
     return {
       reports,
       loading,

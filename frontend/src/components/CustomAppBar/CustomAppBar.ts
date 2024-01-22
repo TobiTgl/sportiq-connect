@@ -21,6 +21,12 @@ export default {
           icon: "mdi-view-dashboard",
           needsAuth: true,
         },
+        {
+          title: "Create Report",
+          route: "Create",
+          icon: "mdi-card-plus-outline",
+          needsAuth: true,
+        },
       ],
     };
   },
