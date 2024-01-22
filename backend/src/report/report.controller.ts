@@ -41,10 +41,11 @@ export class ReportController {
   saveReport(@Req() req, @Body() body): Promise<boolean> {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
+    const username = user.name;
     const tennant = user.tenant;
     const dataframe: DataFrame = body.dataframe;
 
-    return this.service.saveReport(userId, tennant, dataframe);
+    return this.service.saveReport(userId, username, tennant, dataframe);
   }
 
   @Get('getAll')

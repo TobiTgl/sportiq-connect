@@ -145,6 +145,7 @@ export class ReportService {
 
   public async saveReport(
     userId: string,
+    username: string,
     tenant: string,
     dataframe: DataFrame,
   ): Promise<boolean> {
@@ -153,6 +154,7 @@ export class ReportService {
     await docRef
       .set({
         userId,
+        username,
         tenant,
         body: dataframe,
         timestamp: Date.now(),
