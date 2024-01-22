@@ -1,8 +1,9 @@
-import { Controller, Get, Inject, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Query, Req, UseGuards } from '@nestjs/common';
+import { DecodedIdToken } from 'firebase-admin/auth';
+import { StravaAccessGuard } from 'src/analysis/stravaAccess.gard';
+import { AuthGuard } from 'src/auth/auth.gard';
 import { ANALYSIS_SERVICE_URL } from './analysis.pb';
 import { AnalysisService } from './analysis.service';
-import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthGuard } from 'src/auth/auth.gard';
 
 @Controller(ANALYSIS_SERVICE_URL)
 @UseGuards(AuthGuard)

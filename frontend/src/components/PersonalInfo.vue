@@ -124,6 +124,7 @@ async function save() {
   loading.value = true;
   // TODO: implement update user info
   console.log("uploading image...\nThis function is not yet implemented!");
+  password.value = "********";
   editForm.value = false;
   loading.value = false;
 }

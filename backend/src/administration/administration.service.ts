@@ -23,7 +23,7 @@ export class AdministrationService {
     await this.refreshAccessToken(req);
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -51,7 +51,7 @@ export class AdministrationService {
   async disconnectStrava(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -101,7 +101,7 @@ export class AdministrationService {
 
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     await userRef
       .set({
@@ -125,7 +125,7 @@ export class AdministrationService {
   public async refreshAccessToken(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
     const user = await this.getUser(userRef);
 
@@ -165,21 +165,25 @@ export class AdministrationService {
     return 'Token refreshed';
   }
 
-  async getStravaId(req: any) {
+  public async getStravaId(req: any): Promise<String> {
     const userRef = this.firestore
       .collection('administration-service')
-      .doc(req.user.sub);
+      .doc(req.user.uid);
 
-    const user = await this.getUser(userRef);
-
-    if (user.data() !== undefined) {
-      return user.data().athleteId;
-    } else {
-      throw new HttpException(
-        `User is not connected to Strava`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    let id = '';
+    await this.getUser(userRef)
+      .then((user) => {
+        if (user.data() !== undefined) {
+          id = user.data().athleteId;
+        } else {
+          id = null;
+        }
+      })
+      .catch((error) => {
+        this.logger.error('Error while getting athleteId: ' + error);
+        throw error;
+      });
+    return id;
   }
 
   private async getUser(userRef: any) {

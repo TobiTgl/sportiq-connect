@@ -10,6 +10,7 @@ import Register from "@/views/Register/index.vue";
 import Redirect from "@/views/StravaRedirect/index.vue";
 import Dashboard from "@/views/Dashboard/index.vue";
 import ReportView from "@/views/ReportView/index.vue";
+import CreateReport from "@/views/CreateReport/index.vue";
 import Admin from "@/views/Admin/index.vue";
 import { getUserState } from "@/store/authStore";
 
@@ -67,6 +68,11 @@ const routes = [
         path: "report/:id",
         name: "Report",
         component: ReportView,
+      },
+      {
+        path: "create",
+        name: "Create",
+        component: CreateReport,
       },
       {
         path: "admin",
