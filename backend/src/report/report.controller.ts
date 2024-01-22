@@ -39,8 +39,7 @@ export class ReportController {
   }
 
   @Get('create')
-  @UseGuards(AuthGuard)
-  @UseGuards(StravaAccessGuard)
+  @UseGuards(AuthGuard, StravaAccessGuard)
   createReport(@Query() queryParams: any, @Req() req): Promise<DataFrame> {
     const user: DecodedIdToken = req.user;
     const stravaAccessToken = user?.stravaAccessToken;
