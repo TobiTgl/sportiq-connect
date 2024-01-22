@@ -15,7 +15,7 @@
           <v-select
             label="Current subscription"
             :items="availableTenants"
-            v-model="subscription"
+            :v-model="subscription"
           />
         </v-col>
       </v-row>
