@@ -72,7 +72,7 @@ export default {
           })
             .then(() => {
               userCredential.user.getIdToken().then((token) => {
-                axios.post(
+                axios.patch(
                   getAuthServiceUrl() + "/auth/settenant",
                   {
                     tenant: "Free",
