@@ -46,7 +46,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res);
           if (res.data.amountOfActivities === 0) {
             showAlert.value = false;
             alertMessage.value = "No activities found in the given time frame";

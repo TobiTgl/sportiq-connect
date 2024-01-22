@@ -15,7 +15,7 @@
           <v-select
             label="Current subscription"
             :items="availableTenants"
-            :v-model="subscription"
+            v-model="subscription"
           />
         </v-col>
       </v-row>
@@ -43,7 +43,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 
 const availableTenants = ref([]);
-const subscription = ref("");
+const subscription = ref();
 const loading = ref(true);
 
 const msg = ref("");
