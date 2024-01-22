@@ -25,6 +25,7 @@ export default {
           title: "Create Report",
           route: "Create",
           icon: "mdi-card-plus-outline",
+          needsAuth: true,
         },
       ],
     };
