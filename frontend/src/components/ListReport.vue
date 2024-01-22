@@ -19,7 +19,6 @@
   >
     <report-vue
       v-for="item in data"
-      :id="item"
       :width="width"
       :data="item"
       @click.prevent="() => $router.push(`/report/${item}`)"
