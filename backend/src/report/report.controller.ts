@@ -3,17 +3,16 @@ import {
   Controller,
   Get,
   Inject,
-  Param,
   Post,
   Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { DecodedIdToken } from 'firebase-admin/auth';
+import { AuthGuard } from 'src/gards/auth.gard';
+import { StravaAccessGuard } from 'src/gards/stravaAccess.gard';
 import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
-import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthGuard } from 'src/auth/auth.gard';
-import { StravaAccessGuard } from '../analysis/stravaAccess.gard';
 
 @Controller(REPORT_SERVICE_URL)
 @UseGuards(AuthGuard)

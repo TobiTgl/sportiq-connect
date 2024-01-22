@@ -10,10 +10,10 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { DecodedIdToken } from 'firebase-admin/auth';
+import { AuthGuard } from 'src/gards/auth.gard';
 import { ADMINISTRATION_SERVICE_URL } from './administration.pb';
 import { AdministrationService } from './administration.service';
-import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthGuard } from 'src/auth/auth.gard';
 
 @Controller(ADMINISTRATION_SERVICE_URL)
 export class AdministrationController {
