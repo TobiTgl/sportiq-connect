@@ -6,7 +6,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import axios from 'axios';
-import { Firestore } from 'firebase-admin/firestore';
+import { Firestore, QuerySnapshot } from 'firebase-admin/firestore';
+import { DataFrame } from './report.pb';
 
 @Injectable()
 export class ReportService {
@@ -55,46 +56,10 @@ export class ReportService {
   public async createReport(
     stravaAccessToken: string,
     queryParams,
-  ): Promise<{
-    movingTimeData: any[];
-    avgTotalElevationGain: number;
-    avgMaxHeartRate: number;
-    maxHeartRateData: any[];
-    distanceData: any[];
-    avgSpeed: number;
-    avgHeartRateData: any[];
-    avgDistance: number;
-    typeSummary: any[];
-    maxSpeedData: any[];
-    avgSpeedData: any[];
-    amountOfActivities: number;
-    name: string;
-    avgMaxSpeed: number;
-    avgMovingTime: number;
-    avgHeartRate: number;
-    timestamp: number;
-  }> {
+  ): Promise<DataFrame> {
     const after = new Date(queryParams.after * 1000).toDateString();
     const before = new Date(queryParams.before * 1000).toDateString();
-    const report = {
-      name: `von ${after} bis ${before}`,
-      timestamp: Date.now(),
-      amountOfActivities: 0,
-      avgDistance: 0,
-      distanceData: [],
-      avgMovingTime: 0,
-      movingTimeData: [],
-      avgTotalElevationGain: 0,
-      typeSummary: [],
-      avgSpeed: 0,
-      avgSpeedData: [],
-      avgMaxSpeed: 0,
-      maxSpeedData: [],
-      avgHeartRate: 0,
-      avgHeartRateData: [],
-      avgMaxHeartRate: 0,
-      maxHeartRateData: [],
-    };
+    const report: DataFrame = new DataFrame(`von ${after} bis ${before}`);
     const data = this.getActivities(stravaAccessToken, queryParams);
     (await data).forEach(function (object) {
       report.amountOfActivities++;
@@ -181,7 +146,7 @@ export class ReportService {
   public async saveReport(
     userId: string,
     tenant: string,
-    body: NonNullable<unknown>,
+    dataframe: DataFrame,
   ): Promise<boolean> {
     const docRef = this.firestore.collection('report-service').doc();
 
@@ -189,7 +154,8 @@ export class ReportService {
       .set({
         userId,
         tenant,
-        body,
+        body: dataframe,
+        timestamp: Date.now(),
       })
       .catch((error) => {
         this.logger.error(error);
@@ -209,7 +175,28 @@ export class ReportService {
       .collection('report-service')
       .where('tenant', '==', tenant);
 
-    const snapshot = await docRef.get();
-    return snapshot.docs.map((doc) => doc.data());
+    let result;
+    await docRef
+      .get()
+      .then((res) => {
+        if (res.empty) {
+          result = [];
+        } else {
+          result = res.docs.map((doc) => {
+            const stringBody = doc.data().body.toString();
+            const body = JSON.parse(stringBody);
+            return {
+              ...body,
+              timestamp: doc.data().timestamp,
+            };
+          });
+        }
+      })
+      .catch((error) => {
+        this.logger.error('Error while getting reports: ' + error);
+        throw new HttpException('Error while getting reports', error.status);
+      });
+
+    return result;
   }
 }

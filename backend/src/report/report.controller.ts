@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { REPORT_SERVICE_URL } from './report.pb';
+import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { AuthGuard } from 'src/auth/auth.gard';
@@ -31,28 +31,7 @@ export class ReportController {
 
   @Get('create')
   @UseGuards(StravaAccessGuard)
-  createReport(
-    @Query() queryParams: any,
-    @Req() req,
-  ): Promise<{
-    movingTimeData: any[];
-    avgTotalElevationGain: number;
-    avgMaxHeartRate: number;
-    maxHeartRateData: any[];
-    distanceData: any[];
-    avgSpeed: number;
-    avgHeartRateData: any[];
-    avgDistance: number;
-    typeSummary: any[];
-    maxSpeedData: any[];
-    avgSpeedData: any[];
-    amountOfActivities: number;
-    name: string;
-    avgMaxSpeed: number;
-    avgMovingTime: number;
-    avgHeartRate: number;
-    timestamp: number;
-  }> {
+  createReport(@Query() queryParams: any, @Req() req): Promise<DataFrame> {
     const user: DecodedIdToken = req.user;
     const stravaAccessToken = user?.stravaAccessToken;
     return this.service.createReport(stravaAccessToken, queryParams);
@@ -63,8 +42,9 @@ export class ReportController {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
     const tennant = user.tenant;
+    const dataframe: DataFrame = body.dataframe;
 
-    return this.service.saveReport(userId, tennant, body);
+    return this.service.saveReport(userId, tennant, dataframe);
   }
 
   @Get('getAll')
