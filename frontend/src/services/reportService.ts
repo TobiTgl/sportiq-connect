@@ -7,7 +7,7 @@ export async function getAllReports() {
   const auth = getAuth();
   return await auth.currentUser?.getIdToken().then((token) => {
     return axios
-      .get(getReportServiceUrl() + "/report/all", {
+      .get(getReportServiceUrl() + "/report/getAll", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {

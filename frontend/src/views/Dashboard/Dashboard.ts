@@ -18,6 +18,7 @@ export default {
       getAllReports()
         .then((data) => {
           reports.value = data;
+          console.log(reports.value);
           loading.value = false;
           showAlert.value = false;
         })
@@ -27,7 +28,6 @@ export default {
           loading.value = false;
         });
     });
-
     return {
       reports,
       loading,

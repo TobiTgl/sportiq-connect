@@ -39,4 +39,4 @@ lerna-debug.log*
 
 
 # Prevent commit of google secretes
-*service-credentials.json
+src/service-credentials.json
