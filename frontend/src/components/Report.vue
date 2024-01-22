@@ -1,6 +1,10 @@
 <template>
   <v-card class="mb-4" :max-width="width">
-    <v-card-title>{{ data }}</v-card-title>
+    <v-card-text>
+      <p>Timestamp: {{ data.username }}</p>
+      <p>Body: {{ data.title }}</p>
+      <p>Timestamp: {{ data.timestamp }}</p>
+    </v-card-text>
   </v-card>
 </template>
 

@@ -3,17 +3,16 @@ import {
   Controller,
   Get,
   Inject,
-  Param,
   Post,
   Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { REPORT_SERVICE_URL } from './report.pb';
-import { ReportService } from './report.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthGuard } from 'src/auth/auth.gard';
-import { StravaAccessGuard } from '../analysis/stravaAccess.gard';
+import { AuthGuard } from 'src/gards/auth.gard';
+import { StravaAccessGuard } from 'src/gards/stravaAccess.gard';
+import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
+import { ReportService } from './report.service';
 
 @Controller(REPORT_SERVICE_URL)
 export class ReportController {
@@ -40,28 +39,7 @@ export class ReportController {
 
   @Get('create')
   @UseGuards(StravaAccessGuard)
-  createReport(
-    @Query() queryParams: any,
-    @Req() req,
-  ): Promise<{
-    movingTimeData: any[];
-    avgTotalElevationGain: number;
-    avgMaxHeartRate: number;
-    maxHeartRateData: any[];
-    distanceData: any[];
-    avgSpeed: number;
-    avgHeartRateData: any[];
-    avgDistance: number;
-    typeSummary: any[];
-    maxSpeedData: any[];
-    avgSpeedData: any[];
-    amountOfActivities: number;
-    name: string;
-    avgMaxSpeed: number;
-    avgMovingTime: number;
-    avgHeartRate: number;
-    timestamp: number;
-  }> {
+  createReport(@Query() queryParams: any, @Req() req): Promise<DataFrame> {
     const user: DecodedIdToken = req.user;
     const stravaAccessToken = user?.stravaAccessToken;
     return this.service.createReport(stravaAccessToken, queryParams);
@@ -71,13 +49,17 @@ export class ReportController {
   saveReport(@Req() req, @Body() body): Promise<boolean> {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
-    return this.service.saveReport(userId, body);
+    const username = user.name;
+    const tennant = user.tenant;
+    const dataframe: DataFrame = body.dataframe;
+
+    return this.service.saveReport(userId, username, tennant, dataframe);
   }
 
   @Get('getAll')
   getAllReports(@Req() req): Promise<any[]> {
     const user: DecodedIdToken = req.user;
-    const userId = user.uid;
-    return this.service.getAllReport(userId);
+    const tenant = user.tenant;
+    return this.service.getAllReport(tenant);
   }
 }

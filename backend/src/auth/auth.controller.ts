@@ -1,22 +1,21 @@
 import {
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Req,
-  UseGuards,
   BadRequestException,
   Body,
-  UnauthorizedException,
+  Controller,
   Delete,
+  Get,
+  Inject,
   Param,
   Patch,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { AUTH_SERVICE_URL } from './auth.pb';
-import { AuthService } from './auth.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { UserInfo } from './auth.pb';
-import { AuthGuard } from './auth.gard';
+import { AuthGuard } from 'src/gards/auth.gard';
+import { AUTH_SERVICE_URL, UserInfo } from './auth.pb';
+import { AuthService } from './auth.service';
 
 @Controller(AUTH_SERVICE_URL)
 @UseGuards(AuthGuard)

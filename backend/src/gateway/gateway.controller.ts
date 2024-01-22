@@ -1,7 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { GatewayService } from './gateway.service';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthGuard } from 'src/auth/auth.gard';
+import { AuthGuard } from 'src/gards/auth.gard';
 
 @Controller()
 @UseGuards(AuthGuard)

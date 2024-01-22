@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import axios from 'axios';
 import { firestore } from 'firebase-admin';
-import { Firestore } from 'firebase-admin/firestore';
+import { Firestore, QuerySnapshot } from 'firebase-admin/firestore';
+import { DataFrame } from './report.pb';
 
 @Injectable()
 export class ReportService {
@@ -36,7 +37,7 @@ export class ReportService {
     const after = queryParams.after ? 'after=' + queryParams.after : '';
     const before = queryParams.before ? 'before=' + queryParams.before : '';
 
-    const url = `https://www.strava.com/api/v3/athlete/activities?${before}&&${after}&&page=1&per_page=30`;
+    const url = `https://www.strava.com/api/v3/athlete/activities?${before}&&${after}&&page=1&per_page=50`;
 
     const response = await axios.get(url, {
       headers: {
@@ -57,46 +58,10 @@ export class ReportService {
   public async createReport(
     stravaAccessToken: string,
     queryParams,
-  ): Promise<{
-    movingTimeData: any[];
-    avgTotalElevationGain: number;
-    avgMaxHeartRate: number;
-    maxHeartRateData: any[];
-    distanceData: any[];
-    avgSpeed: number;
-    avgHeartRateData: any[];
-    avgDistance: number;
-    typeSummary: any[];
-    maxSpeedData: any[];
-    avgSpeedData: any[];
-    amountOfActivities: number;
-    name: string;
-    avgMaxSpeed: number;
-    avgMovingTime: number;
-    avgHeartRate: number;
-    timestamp: number;
-  }> {
+  ): Promise<DataFrame> {
     const after = new Date(queryParams.after * 1000).toDateString();
     const before = new Date(queryParams.before * 1000).toDateString();
-    const report = {
-      name: `von ${after} bis ${before}`,
-      timestamp: Date.now(),
-      amountOfActivities: 0,
-      avgDistance: 0,
-      distanceData: [],
-      avgMovingTime: 0,
-      movingTimeData: [],
-      avgTotalElevationGain: 0,
-      typeSummary: [],
-      avgSpeed: 0,
-      avgSpeedData: [],
-      avgMaxSpeed: 0,
-      maxSpeedData: [],
-      avgHeartRate: 0,
-      avgHeartRateData: [],
-      avgMaxHeartRate: 0,
-      maxHeartRateData: [],
-    };
+    const report: DataFrame = new DataFrame(`von ${after} bis ${before}`);
     const data = this.getActivities(stravaAccessToken, queryParams);
     (await data).forEach(function (object) {
       report.amountOfActivities++;
@@ -182,13 +147,19 @@ export class ReportService {
 
   public async saveReport(
     userId: string,
-    body: NonNullable<unknown>,
+    username: string,
+    tenant: string,
+    dataframe: DataFrame,
   ): Promise<boolean> {
     const docRef = this.firestore.collection('report-service').doc();
 
     await docRef
       .set({
-        report: { body, userId },
+        userId,
+        username,
+        tenant,
+        body: dataframe,
+        timestamp: Date.now(),
       })
       .catch((error) => {
         this.logger.error(error);
@@ -197,18 +168,40 @@ export class ReportService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
-    this.logger.log('Report saved for user: ' + userId);
+    this.logger.log(
+      'Report saved for user: ' + userId + ' and tenant: ' + tenant,
+    );
     return true;
   }
 
-  public async getAllReport(userId: string): Promise<any[]> {
+  public async getAllReport(tenant: string): Promise<any[]> {
     const docRef = this.firestore
       .collection('report-service')
-      .doc(userId)
-      .collection('reports');
+      .where('tenant', '==', tenant);
 
-    const snapshot = await docRef.get();
-    return snapshot.docs.map((doc) => doc.data());
+    let result;
+    await docRef
+      .get()
+      .then((res) => {
+        if (res.empty) {
+          result = [];
+        } else {
+          result = res.docs.map((doc) => {
+            const stringBody = doc.data().body.toString();
+            const body = JSON.parse(stringBody);
+            return {
+              ...body,
+              timestamp: doc.data().timestamp,
+            };
+          });
+        }
+      })
+      .catch((error) => {
+        this.logger.error('Error while getting reports: ' + error);
+        throw new HttpException('Error while getting reports', error.status);
+      });
+
+    return result;
   }
 
   public async getDailyReport(): Promise<String> {

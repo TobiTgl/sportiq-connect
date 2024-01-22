@@ -77,12 +77,19 @@ export default {
 
       const api = `${getReportServiceUrl()}/report/save`;
 
-      axios
-        .post(api, data, {
-          headers: {
-            Authorization: `Bearer ${await user?.getIdToken()}`,
+      const payload = JSON.stringify(data.value);
+      await axios
+        .post(
+          api,
+          {
+            dataframe: payload,
           },
-        })
+          {
+            headers: {
+              Authorization: `Bearer ${await user?.getIdToken()}`,
+            },
+          }
+        )
         .then((res) => {
           showAlert.value = false;
           alertMessage.value = "saved Report...";
