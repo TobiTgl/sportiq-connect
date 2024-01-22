@@ -1,134 +1,45 @@
 <template>
-  <v-card class="mb-4" :max-width="width">
-    <v-card>
-      <v-card-title class="text-center"
-        ><h1 class="pa-5">Report {{ data.name }}</h1></v-card-title
-      >
-      <v-container>
-        <h1 class="text-center">Metrics</h1>
-        <v-row class="mb-6" no-gutters>
-          <v-col>
-            <v-sheet class="pa-2 ma-2 rounded-xl">
-              <v-card-text class="text-center">
-                <v-row class="mb-2 pt-6" no-gutters>
-                  <v-col class="text-grey-darken-2">
-                    <h1>Amount of Activities</h1>
-                  </v-col>
-
-                  <v-col class="text-red">
-                    <h1>Max Heartbeat</h1>
-                  </v-col>
-                  <v-col class="text-orange">
-                    <h1>Max Speed</h1>
-                  </v-col>
-                </v-row>
-                <v-row class="mb-2" no-gutters>
-                  <v-col class="pt-6 text-grey-darken-2">
-                    <h1>{{ data.amountOfActivities }}</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-red">
-                    <h1>{{ data.avgMaxHeartRate.toString().slice(0, 5) }}</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-orange">
-                    <h1>{{ data.avgMaxSpeed.toString().slice(0, 5) }}</h1>
-                  </v-col>
-                </v-row>
-                <v-row class="mb-2" no-gutters>
-                  <v-col class="pt-6"> </v-col>
-                  <v-col class="pt-6 text-red">
-                    <h1>bpm</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-orange">
-                    <h1>km/h</h1>
-                  </v-col>
-                </v-row>
-                <v-row class="mb-2 pt-6" no-gutters>
-                  <v-col class="text-amber">
-                    <h1>Average Speed</h1>
-                  </v-col>
-                  <v-col class="text-blue">
-                    <h1>Average Heartbeat</h1>
-                  </v-col>
-
-                  <v-col class="text-teal text-green">
-                    <h1>Average Distance</h1>
-                  </v-col>
-                </v-row>
-                <v-row class="mb-2" no-gutters>
-                  <v-col class="pt-6 text-amber">
-                    <h1>{{ data.avgSpeed.toString().slice(0, 5) }}</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-blue">
-                    <h1>{{ data.avgHeartRate.toString().slice(0, 5) }}</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-green">
-                    <h1>
-                      {{ data.avgDistance.toString().slice(0, 5) / 1000 }}
-                    </h1>
-                  </v-col>
-                </v-row>
-                <v-row class="mb-2" no-gutters>
-                  <v-col class="pt-6 text-amber">
-                    <h1>km/h</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-blue">
-                    <h1>bpm</h1>
-                  </v-col>
-                  <v-col class="pt-6 text-green">
-                    <h1>km</h1>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-container>
+  <v-card
+    class="mb-3 rounded-xl"
+    :width="width"
+    :color="user ? 'secondary' : ''"
+  >
+    <v-card class="rounded-lg my-8 mx-8" style="overflow: visible">
+      <v-card-text class="text-left text-truncate">
+        Creator: {{ data.username }}
+      </v-card-text>
+      <v-card-text class="text-center text-h6 font-weight-medium pt-3 pb-0">
+        {{ data.name }}
+      </v-card-text>
+      <v-card-text class="text-center">
+        <p>Amount of Activities:{{ data.amountOfActivities }}</p>
+        <p>Max Speed {{ Math.round(data.avgSpeed * 100) / 100 }}</p>
+        <p>Average Speed {{ Math.round(data.avgSpeed * 100) / 100 }}</p>
+        <p>Average Heartbeat {{ Math.round(data.avgHeartRate * 10) / 10 }}</p>
+        <p>Max Heartbeat {{ Math.round(data.avgHeartRate * 10) / 10 }}</p>
+        <p>Average Distance {{ Math.round(data.avgDistance * 100) / 100 }}</p>
+      </v-card-text>
+      <v-card-text class="text-right text-truncate">
+        Timestamp: {{ niceDate }}
+      </v-card-text>
     </v-card>
-    <v-card class="mb-6">
-      <v-container>
-        <h1 class="text-center">Type of Activities</h1>
-        <v-row>
-          <li class="no-bullets" v-for="type in data.typeSummary">
-            <v-col>
-              <h2>{{ type }}</h2>
-            </v-col>
-          </li>
-        </v-row>
-      </v-container>
-    </v-card>
-    <template v-if="create">
-      <v-card class="mb-6">
-        <h1 class="text-center">Heartbeat data</h1>
-        <p>{{ data.avgHeartRateData }}</p>
-      </v-card>
-      <v-card class="mb-6">
-        <h1 class="text-center">Speed data</h1>
-        <p>{{ data.avgSpeedData }}</p>
-      </v-card>
-      <v-card class="mb-6">
-        <h1 class="text-center">distance data</h1>
-        <p>{{ data.distanceData }}</p>
-      </v-card>
-      <v-card class="mb-6">
-        <h1 class="text-center">Max Heartbeat Data</h1>
-        <p>{{ data.maxHeartRateData }}</p>
-      </v-card>
-      <v-card class="mb-6">
-        <h1 class="text-center">Max Speed Data</h1>
-        <p>{{ data.maxSpeedData }}</p>
-      </v-card>
-      <v-card class="mb-6">
-        <h1 class="text-center">Moving-time Data</h1>
-        <p>{{ data.movingTimeData }}</p>
-      </v-card>
-    </template>
   </v-card>
 </template>
 
 <script lang="ts" setup>
-defineProps({
+import { ref } from "vue";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+const user = auth?.currentUser;
+
+const props = defineProps({
   data: { type: Object, required: true },
   width: { type: Number, required: false },
-  create: { type: Boolean, required: true },
 });
+
+const niceDate = ref("");
+niceDate.value = `${new Date(props.data.timestamp).getDate()}.${
+  new Date(props.data.timestamp).getMonth() + 1
+}.${new Date(props.data.timestamp).getFullYear()}`;
 </script>

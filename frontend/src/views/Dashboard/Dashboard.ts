@@ -18,7 +18,6 @@ export default {
       getAllReports()
         .then((data) => {
           reports.value = data;
-          console.log(reports.value);
           loading.value = false;
           showAlert.value = false;
         })
