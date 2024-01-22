@@ -15,11 +15,13 @@ import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
 
 @Controller(REPORT_SERVICE_URL)
+@UseGuards(AuthGuard)
 export class ReportController {
   @Inject(ReportService)
   private readonly service: ReportService;
 
   @Get()
+  @UseGuards(AuthGuard)
   hello(@Req() req): Promise<string> {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
