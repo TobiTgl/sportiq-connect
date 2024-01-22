@@ -1,4 +1,5 @@
 import { getReportServiceUrl } from "@/helpers/helpers";
+import router from "@/router";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
@@ -86,6 +87,7 @@ export default {
           showAlert.value = false;
           alertMessage.value = "saved Report...";
           loading.value = false;
+          router.push({ name: "Dashboard" });
         })
         .catch((error) => {
           alertType.value = "error";

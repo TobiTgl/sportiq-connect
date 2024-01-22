@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import axios from 'axios';
 import { Firestore } from 'firebase-admin/firestore';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class ReportService {
@@ -179,16 +178,15 @@ export class ReportService {
     return report;
   }
 
-  public async saveReport(userId: string, body: NonNullable<unknown>) {
-    const docRef = this.firestore
-      .collection('report-service')
-      .doc(userId)
-      .collection('reports')
-      .doc(randomUUID());
+  public async saveReport(
+    userId: string,
+    body: NonNullable<unknown>,
+  ): Promise<boolean> {
+    const docRef = this.firestore.collection('report-service').doc();
 
     await docRef
       .set({
-        report: body,
+        report: { body, userId },
       })
       .catch((error) => {
         this.logger.error(error);
@@ -197,6 +195,7 @@ export class ReportService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
+    this.logger.log('Report saved for user: ' + userId);
     return true;
   }
 
