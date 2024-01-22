@@ -80,19 +80,19 @@
 
   <v-divider class="mt-5"></v-divider>
 
-    <v-list color="primary">
-        <template v-for="item in features">
-            <v-list-item
-                    :key="item.title"
-                    :title="item.title"
-                    :prepend-icon="item.icon"
-                    v-if="(user !== null) === item.needsAuth || item.needsAuth === false"
-                    link
-                    router
-                    :to="{ name: item.route }"
-            />
-        </template>
-    </v-list>
+  <v-list color="primary">
+    <template v-for="item in features">
+      <v-list-item
+        :key="item.title"
+        :title="item.title"
+        :prepend-icon="item.icon"
+        v-if="(user !== null) === item.needsAuth || item.needsAuth === false"
+        link
+        router
+        :to="{ name: item.route }"
+      />
+    </template>
+  </v-list>
 
   <v-divider class="mt-5"></v-divider>
 
