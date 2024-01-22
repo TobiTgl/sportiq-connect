@@ -191,6 +191,7 @@ export class ReportService {
             const body = JSON.parse(stringBody);
             return {
               ...body,
+              username: doc.data().username,
               timestamp: doc.data().timestamp,
             };
           });
