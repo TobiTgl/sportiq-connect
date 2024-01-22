@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import axios from 'axios';
+import { firestore } from 'firebase-admin';
 import { Firestore } from 'firebase-admin/firestore';
 
 @Injectable()
@@ -209,10 +210,6 @@ export class ReportService {
     const snapshot = await docRef.get();
     return snapshot.docs.map((doc) => doc.data());
   }
-}
-
-//,
-  }
 
   public async getDailyReport(): Promise<String> {
     const end = new Date();
@@ -239,11 +236,8 @@ export class ReportService {
     const end = new Date();
     const start = new Date();
     start.setTime(end.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours from the current time
-
     const reportRef = this.firestore
-      .collection('report-service')
-      .where('timestamp', '>=', start)
-      .where('timestamp', '<=', end);
+      .collection('report-service');
 
     const reports = await reportRef.get().catch((error) => {
       this.logger.error(error);
@@ -251,6 +245,13 @@ export class ReportService {
         `Couldn't get report`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    });
+    let reportCounter = 0
+    reports.forEach((report) => {
+      const createdOn = report.data().timestamp;
+      if (createdOn >= start && createdOn <= end) {
+        reportCounter++;
+      }
     });
 
     const newDailyReport = this.firestore
@@ -260,7 +261,7 @@ export class ReportService {
     await newDailyReport
       .set({
         timestamp: end,
-        reports: reports.size,
+        reports: reportCounter,
       })
       .catch((error) => {
         this.logger.error(error);
@@ -274,7 +275,7 @@ export class ReportService {
       'Created daily report at ' +
         end.toISOString() +
         ' number of reports from the last 24h: ' +
-        reports.size,
+        reportCounter,
     );
     return 'Report created';
   }
