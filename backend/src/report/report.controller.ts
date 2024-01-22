@@ -28,6 +28,7 @@ export class ReportController {
     const tenantId = user?.tenant;
     return this.service.hello(userId, tenantId);
   }
+
   @Get('create')
   @UseGuards(StravaAccessGuard)
   createReport(
@@ -63,14 +64,11 @@ export class ReportController {
     const userId = user.uid;
     return this.service.saveReport(userId, body);
   }
+
   @Get('getAll')
   getAllReports(@Req() req): Promise<any[]> {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
     return this.service.getAllReport(userId);
-  }
-  @Get(':id')
-  getSingleReport(@Req() req, @Param() params: any): Promise<Object> {
-    return this.service.getSingleReport(params.id);
   }
 }
