@@ -21,6 +21,7 @@
       v-for="item in data"
       :width="width"
       :data="item"
+      :create="false"
       @click.prevent="() => $router.push(`/report/${item}`)"
     />
   </vue-flex-waterfall>
@@ -34,7 +35,7 @@ defineProps({
   data: { type: Array<any>, required: true },
 });
 
-const width = 200;
+const width = 450;
 const breakAt = (() => {
   const obj: Record<string, number> = {};
   for (let i = 1; i <= 5; i++) {

@@ -3,6 +3,7 @@ import router from "@/router";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { ref } from "vue";
+import Report from "@/components/Report.vue";
 
 export default {
   name: "Create",
@@ -10,6 +11,9 @@ export default {
     return {
       // add variables
     };
+  },
+  components: {
+    report: Report,
   },
   setup() {
     const user = getAuth().currentUser;
