@@ -18,12 +18,4 @@ export class AnalysisController {
     const tenantId = user?.tenant;
     return this.service.hello(userId, tenantId);
   }
-
-  @Get('activities')
-  @UseGuards(StravaAccessGuard)
-  getActivities(@Query() queryParams: any, @Req() req): Promise<Array<any>> {
-    const user: DecodedIdToken = req.user;
-    const stravaAccessToken = user?.stravaAccessToken;
-    return this.service.getActivities(stravaAccessToken, queryParams);
-  }
 }
