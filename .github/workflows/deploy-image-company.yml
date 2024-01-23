@@ -65,7 +65,6 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           cd ./kubernetes
-          kubectl apply -f ./company-namespace/ingress-controller-${{ github.event.inputs.env }}.yaml
           kubectl apply -f ./company-namespace/tls-ingress-company.yaml
           kubectl apply -f ./company-namespace/auth-service/auth-deployment.yaml
           kubectl apply -f ./company-namespace/auth-service/auth-service.yaml
