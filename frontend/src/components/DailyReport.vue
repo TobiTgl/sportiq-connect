@@ -41,16 +41,12 @@ watch(dailyReport, (newVal, oldVal) => {
 });
 
 onBeforeMount(async () => {
-  user?.getIdToken().then((token) => {
-    axios
-      .get(`${getReportServiceUrl()}/report/dailyreport`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        dailyReport.value = res.data;
-      })
-      .catch((error) => {});
-  });
+  await axios
+    .get(`${getReportServiceUrl()}/report/dailyreport`)
+    .then((res) => {
+      dailyReport.value = res.data;
+    })
+    .catch((error) => {});
 });
 </script>
 <style>
