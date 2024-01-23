@@ -1,4 +1,4 @@
-name: Enable autoscaler
+name: Enable autoscaler (company namespace)
 
 on:
   # trigger manually

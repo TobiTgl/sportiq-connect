@@ -1,4 +1,4 @@
-name: Deploy image to Kubernetes
+name: Deploy image to Kubernetes (company namespace)
 
 on:
   # trigger manually
@@ -66,7 +66,7 @@ jobs:
         run: |
           cd ./kubernetes
           kubectl apply -f ingress-controller-${{ github.event.inputs.env }}.yaml
-          kubectl apply -f tls-ingress-company.yaml
+          kubectl apply -f ./company-namespace/tls-ingress-company.yaml
           kubectl apply -f ./company-namespace/auth-service/auth-deployment.yaml
           kubectl apply -f ./company-namespace/auth-service/auth-service.yaml
           kubectl apply -f ./company-namespace/administration-service/administration-deployment.yaml

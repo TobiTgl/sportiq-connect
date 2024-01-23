@@ -34,7 +34,7 @@ defineProps({
   data: { type: Array<any>, required: true },
 });
 
-const width = 450;
+const width = 375;
 const breakAt = (() => {
   const obj: Record<string, number> = {};
   for (let i = 1; i <= 5; i++) {
