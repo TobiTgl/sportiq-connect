@@ -17,6 +17,13 @@ export default {
   },
   setup() {
     const user = getAuth().currentUser;
+    const tenant = ref("");
+    user?.getIdTokenResult(true).then((res) => {
+      if (res.claims.role) {
+        tenant.value = "" + res.claims.tenant;
+      }
+    });
+
     const notConnected = ref(
       localStorage.getItem("athleteId") === null ? true : false
     );
@@ -127,6 +134,7 @@ export default {
       getActivities,
       saveReport,
       length,
+      tenant,
     };
   },
 };

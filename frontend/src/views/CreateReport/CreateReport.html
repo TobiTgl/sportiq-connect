@@ -8,10 +8,10 @@
     and connect a Strava account!
   </v-alert>
 
-  <v-form v-if="!notConnected && !showAlert" class="pb-7 text-center">
-    <v-row align="center">
+  <v-form v-if="!notConnected && !showAlert" class="text-center">
+    <v-row align="center" justify="center">
       <!-- start date -->
-      <v-col cols="12" md="6" lg="4" xl="2">
+      <v-col cols="12" sm="6" md="4" lg="3" xl="2">
         <v-text-field
           label="Start Date"
           type="date"
@@ -21,7 +21,7 @@
       </v-col>
 
       <!-- end date  -->
-      <v-col cols="12" md="6" lg="4" xl="2">
+      <v-col cols="12" sm="6" md="4" lg="3" xl="2">
         <v-text-field
           label="End Date"
           type="date"
@@ -29,7 +29,7 @@
           variant="solo"
         />
       </v-col>
-      <v-col cols="6" md="3" lg="2" xl="1">
+      <v-col cols="1">
         <v-btn color="primary" @click.prevent="getActivities">Query</v-btn>
       </v-col>
     </v-row>
@@ -68,11 +68,11 @@
       >
       <v-container>
         <h1 class="text-center">Metrics</h1>
-        <v-row class="mb-6" no-gutters="">
+        <v-row class="mb-6" no-gutters>
           <v-col>
             <v-sheet class="pa-2 ma-2 rounded-xl">
               <v-card-text class="text-center">
-                <v-row class="mb-2 pt-6" no-gutters="">
+                <v-row class="mb-2 pt-6" no-gutters>
                   <v-col class="text-grey-darken-2">
                     <h1>Amount of Activities</h1>
                   </v-col>
@@ -84,7 +84,7 @@
                     <h1>Max Speed</h1>
                   </v-col>
                 </v-row>
-                <v-row class="mb-2" no-gutters="">
+                <v-row class="mb-2" no-gutters>
                   <v-col class="pt-6 text-grey-darken-2">
                     <h1>{{data.amountOfActivities}}</h1>
                   </v-col>
@@ -95,7 +95,7 @@
                     <h1>{{data.avgMaxSpeed.toString().slice(0,5)}}</h1>
                   </v-col>
                 </v-row>
-                <v-row class="mb-2" no-gutters="">
+                <v-row class="mb-2" no-gutters>
                   <v-col class="pt-6"> </v-col>
                   <v-col class="pt-6 text-red">
                     <h1>bpm</h1>
@@ -104,7 +104,7 @@
                     <h1>km/h</h1>
                   </v-col>
                 </v-row>
-                <v-row class="mb-2 pt-6" no-gutters="">
+                <v-row class="mb-2 pt-6" no-gutters>
                   <v-col class="text-amber">
                     <h1>Average Speed</h1>
                   </v-col>
@@ -116,7 +116,7 @@
                     <h1>Average Distance</h1>
                   </v-col>
                 </v-row>
-                <v-row class="mb-2" no-gutters="">
+                <v-row class="mb-2" no-gutters>
                   <v-col class="pt-6 text-amber">
                     <h1>{{data.avgSpeed.toString().slice(0,5)}}</h1>
                   </v-col>
@@ -127,7 +127,7 @@
                     <h1>{{data.avgDistance.toString().slice(0,5)/1000}}</h1>
                   </v-col>
                 </v-row>
-                <v-row class="mb-2" no-gutters="">
+                <v-row class="mb-2" no-gutters>
                   <v-col class="pt-6 text-amber">
                     <h1>km/h</h1>
                   </v-col>
@@ -180,6 +180,8 @@
       <h1 class="text-center">Moving-time Data</h1>
       <p>{{data.movingTimeData }}</p>
     </v-card>
-    <v-btn color="primary" @click.prevent="saveReport">Save</v-btn>
+    <v-btn v-if="tenant !== 'Free'" color="primary" @click.prevent="saveReport">
+      Save
+    </v-btn>
   </template>
 </v-container>
