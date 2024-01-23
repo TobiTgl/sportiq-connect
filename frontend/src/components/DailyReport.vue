@@ -1,7 +1,13 @@
 <template>
-  <v-container fluid class="text-center report-container">
-    <h3>Reports created in the last 24 hours (globally)</h3>
-    <h3 class="number">{{ displayedReport }}</h3>
+  <v-container fluid class="text-center">
+    <v-row justify="center">
+      <v-col cols="12" sm="6" md="4">
+        <v-card class="report-container rounded-lg pa-3" elevation="2">
+          <h3>Reports created in the last 24 hours (globally)</h3>
+          <h3 class="number">{{ displayedReport }}</h3>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -55,16 +61,11 @@ onBeforeMount(async () => {
   font-size: 2em;
 }
 .report-container {
-  background-color: #f9f9f9; /* Light gray background */
   border: 1px solid #ddd; /* Gray border */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px; /* Some padding */
-  max-width: 30%; /* Maximum width */
-  margin: 0 auto; /* Center the container */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
 }
 .report-container:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
   transition: box-shadow 0.3s ease-in-out;
 }
 </style>
