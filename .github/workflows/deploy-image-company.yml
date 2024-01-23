@@ -1,4 +1,4 @@
-name: Deploy image to Kubernetes
+name: Deploy image to Kubernetes (company namespace)
 
 on:
   # trigger manually
