@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import axios from 'axios';
-import { Firestore, QuerySnapshot } from 'firebase-admin/firestore';
+import { Firestore } from 'firebase-admin/firestore';
 import { DataFrame } from './report.pb';
 
 @Injectable()
@@ -233,5 +233,74 @@ export class ReportService {
       });
 
     return result;
+  }
+
+  public async getDailyReport(): Promise<String> {
+    const end = new Date();
+    const start = new Date();
+    end.setUTCHours(23, 59, 59, 999); // Set the time to the end of today
+    start.setUTCHours(0, 0, 0, 0);
+
+    const dailyReportRef = this.firestore
+      .collection('daily-report')
+      .where('timestamp', '>=', start)
+      .where('timestamp', '<=', end);
+
+    const reports = await dailyReportRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get report`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+    return reports.docs[0].data().reports;
+  }
+
+  public async createDailyReport(): Promise<String> {
+    const end = new Date();
+    const start = new Date();
+    start.setTime(end.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours from the current time
+    const reportRef = this.firestore
+      .collection('report-service');
+
+    const reports = await reportRef.get().catch((error) => {
+      this.logger.error(error);
+      throw new HttpException(
+        `Couldn't get report`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+    let reportCounter = 0
+    reports.forEach((report) => {
+      const createdOn = report.data().timestamp;
+      if (createdOn >= start && createdOn <= end) {
+        reportCounter++;
+      }
+    });
+
+    const newDailyReport = this.firestore
+      .collection('daily-report')
+      .doc(end.toISOString());
+
+    await newDailyReport
+      .set({
+        timestamp: end,
+        reports: reportCounter,
+      })
+      .catch((error) => {
+        this.logger.error(error);
+        throw new HttpException(
+          'Presisting token failed',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+
+    this.logger.log(
+      'Created daily report at ' +
+        end.toISOString() +
+        ' number of reports from the last 24h: ' +
+        reportCounter,
+    );
+    return 'Report created';
   }
 }

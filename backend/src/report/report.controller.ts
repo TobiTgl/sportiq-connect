@@ -18,12 +18,12 @@ import { DataFrame, REPORT_SERVICE_URL } from './report.pb';
 import { ReportService } from './report.service';
 
 @Controller(REPORT_SERVICE_URL)
-@UseGuards(AuthGuard)
 export class ReportController {
   @Inject(ReportService)
   private readonly service: ReportService;
 
   @Get()
+  @UseGuards(AuthGuard)
   hello(@Req() req): Promise<string> {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
@@ -31,8 +31,18 @@ export class ReportController {
     return this.service.hello(userId, tenantId);
   }
 
+  @Post('dailyreport')
+  createDailyreport(): Promise<String> {
+    return this.service.createDailyReport();
+  }
+
+  @Get('dailyreport')
+  getDailyreport(): Promise<String> {
+    return this.service.getDailyReport();
+  }
+
   @Get('create')
-  @UseGuards(StravaAccessGuard)
+  @UseGuards(AuthGuard, StravaAccessGuard)
   createReport(@Query() queryParams: any, @Req() req): Promise<DataFrame> {
     const user: DecodedIdToken = req.user;
     const stravaAccessToken = user?.stravaAccessToken;
@@ -40,6 +50,7 @@ export class ReportController {
   }
 
   @Post('save')
+  @UseGuards(AuthGuard)
   saveReport(@Req() req, @Body() body): Promise<boolean> {
     const user: DecodedIdToken = req.user;
     const userId = user.uid;
@@ -51,6 +62,7 @@ export class ReportController {
   }
 
   @Get('getAll')
+  @UseGuards(AuthGuard)
   getAllReports(@Req() req): Promise<any[]> {
     const user: DecodedIdToken = req.user;
     const tenant = user.tenant;

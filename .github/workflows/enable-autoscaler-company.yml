@@ -1,0 +1,50 @@
+name: Enable autoscaler
+
+on:
+  # trigger manually
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  PROJECT_ID: quixotic-market-402317
+  GAR_LOCATION: europe-west3
+
+jobs:
+  deploy:
+    # Add 'id-token' with the intended permissions for workload identity federation
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Authentication via credentials json past credentials json into sectrets GCP_CREDENTIALS (in iam create service account and add key + download json file)
+      - name: Google Auth
+        id: auth
+        uses: "google-github-actions/auth@v0"
+        with:
+          token_format: "access_token"
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+
+      - id: "get-credentials"
+        uses: "google-github-actions/get-gke-credentials@v2"
+        with:
+          cluster_name: "sportiqconnect-gke-${{ github.event.inputs.env }}"
+          location: "us-central1-c"
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl autoscale deployment administration-deployment --cpu-percent=50 --min=2 --max=3 -n company
+          kubectl autoscale deployment auth-deployment --cpu-percent=50 --min=2 --max=3 -n company
+          kubectl autoscale deployment report-deployment --cpu-percent=50 --min=2 --max=3 -n company
