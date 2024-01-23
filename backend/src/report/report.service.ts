@@ -6,8 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import axios from 'axios';
-import { firestore } from 'firebase-admin';
-import { Firestore, QuerySnapshot } from 'firebase-admin/firestore';
+import { Firestore } from 'firebase-admin/firestore';
 import { DataFrame } from './report.pb';
 
 @Injectable()
