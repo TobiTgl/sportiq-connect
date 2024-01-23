@@ -2,7 +2,10 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
+  Param,
   Post,
   Query,
   Req,
@@ -64,5 +67,19 @@ export class ReportController {
     const user: DecodedIdToken = req.user;
     const tenant = user.tenant;
     return this.service.getAllReport(tenant);
+  }
+
+  @Get('getSingle/:id')
+  getSingleReport(@Req() req, @Param() param): Promise<any[]> {
+    const user: DecodedIdToken = req.user;
+    if (!param.id) {
+      throw new HttpException(
+        'No report id was passed',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const id = param.id;
+
+    return this.service.getSingleReport(id);
   }
 }
