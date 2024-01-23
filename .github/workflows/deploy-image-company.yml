@@ -79,4 +79,4 @@ jobs:
           kubectl set image deployment/auth-deployment auth=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-auth:${{ github.event.inputs.version }} -n company
           kubectl set image deployment/administration-deployment administration=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-administration:${{ github.event.inputs.version }} -n company
           kubectl set image deployment/report-deployment report=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-report:${{ github.event.inputs.version }} -n company
-          kubectl set image deployment/frontend-deployment frontend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-frontend:${{ github.event.inputs.version }} -n company
+          kubectl set image deployment/frontend-deployment-company frontend=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-project-registry/cloud-project-frontend:${{ github.event.inputs.version }} -n company
