@@ -128,6 +128,6 @@ provider "kubernetes" {
 # state of terraform infrastructure
 terraform {
   backend "gcs" {
-    bucket = "htwg-cloud-project"
+    bucket = "htwg-cloud-project-1"
   }
 }
