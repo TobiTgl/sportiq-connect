@@ -62,9 +62,8 @@ gcloud config set project <YOUR_PROJECT_ID>
 gcloud services enable compute.googleapis.com
 gcloud services enable artifactregistry.googleapis.com
 gcloud services enable container.googleapis.com
+gcloud services enable identitytoolkit.googleapis.com
 gcloud iam service-accounts create <SERVICE_ACCOUNT_NAME>
-gcloud artifacts repositories create cloud-project-registry --repository-format=docker --location=europe-west3
-gcloud artifacts repositories add-iam-policy-binding cloud-project-registry --location=europe-west3 --member=allUsers --role=roles/artifactregistry.reader
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/compute.admin"
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/container.clusterAdmin"
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/container.admin"
@@ -77,11 +76,16 @@ gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SE
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/artifactregistry.admin"
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="firebaseauth.admin"
 gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/firebase.sdkAdminServiceAgent"
-gcloud compute addresses create sportiqconnect --global --ip-version=IPV4
-gcloud compute addresses describe sportiqconnect --global 
+gcloud artifacts repositories create cloud-project-registry --repository-format=docker --location=europe-west3
+gcloud artifacts repositories add-iam-policy-binding cloud-project-registry --location=europe-west3 --member=allUsers --role=roles/artifactregistry.reader
+gcloud firestore databases create --location=europe-west3 --database=cloud-project
+gcloud compute addresses create cloud-project-prod --global --ip-version=IPV4
+gcloud compute addresses describe cloud-project-prod --global 
 -> add ip to ingress-controller-prod.yaml (loadbalancer ip line 351)
 gcloud storage buckets create gs://htwg-cloud-project (name der noch frei ist)
 -> in gke.tf change bucked name to bucked you created
+activate identity platform in gcloud console (didnt find the command)
+add provider email/password
 
 optional:
 gcloud components install kubectl
