@@ -18,7 +18,7 @@ on:
         type: string
 
 env:
-  PROJECT_ID: quixotic-market-402317
+  PROJECT_ID: "${{ secrets.PROJECT_ID }}"
   GAR_LOCATION: europe-west3
 
 jobs:

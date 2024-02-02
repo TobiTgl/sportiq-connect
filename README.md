@@ -54,6 +54,52 @@ $ docker build ./backend -t cloud-project-backend
 $ docker build ./frontend -t cloud-project-frontend
 ```
 
+## gcloud
+necessary gcloud services: compute, firestore, artifact registry, cloud storage, kubernetes engine, vpc
+```bash
+gcloud auth login
+gcloud config set project <YOUR_PROJECT_ID>
+gcloud services enable compute.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+gcloud services enable container.googleapis.com
+gcloud iam service-accounts create <SERVICE_ACCOUNT_NAME>
+gcloud artifacts repositories create cloud-project-registry --repository-format=docker --location=europe-west3
+gcloud artifacts repositories add-iam-policy-binding cloud-project-registry --location=europe-west3 --member=allUsers --role=roles/artifactregistry.reader
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/compute.admin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/container.clusterAdmin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/container.admin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/editor"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/firebasestorage.admin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/firestore.serviceAgent"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/iam.securityAdmin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/iam.serviceAccountTokenCreator"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/resourcemanager.projectIamAdmin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/artifactregistry.admin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="firebaseauth.admin"
+gcloud projects add-iam-policy-binding cloud-abgabe --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/firebase.sdkAdminServiceAgent"
+gcloud compute addresses create sportiqconnect --global --ip-version=IPV4
+gcloud compute addresses describe sportiqconnect --global 
+-> add ip to ingress-controller-prod.yaml (loadbalancer ip line 351)
+gcloud storage buckets create gs://htwg-cloud-project (name der noch frei ist)
+-> in gke.tf change bucked name to bucked you created
+
+optional:
+gcloud components install kubectl
+gcloud components install gke-gcloud-auth-plugin
+```
+secrets for gh-actions workflow:
+PROJECT_ID: ID of your gcloud project
+REGION: region of your kubernetes cluster
+CLIENT_ID: id of your strava dev account (enable in your strava account)
+CLIENT_SECRET: secret from strava dev account
+TLS_CRT: TLS certificate (base64 encoded)
+TLS_KEY: TLS private key (base64 encoded)
+TLS_CRT_COMPANY: TLS certificate (base64 encoded)
+TLS_KEY_COMPANY: TLS private key (base64 encoded)
+FIREBASE_SERIVCE_ACCOUNT: serivce account with firebase permissions (for demo purposes same as gh actions serivce account) (base64 encoded)
+GCP_CREDENTIALS: gcloud service account credentials json
+-   gcloud -> IAM -> Service account -> create service account, roles (kubernetes engine admin, compute admin, artifact registry admin, firestore admin, Security administrator/Sicherheitsadministrator, Service Account Key Creator/Ersteller von Dienstkonto-Tokens, basic editor/bearbeiter (gcloud roles are a huge pain so I just gave up and used editor role)) -> add key (json)
+
 ## License
 
 This project uses dependencies under the [MIT licensed](LICENSE).
