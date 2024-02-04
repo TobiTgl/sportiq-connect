@@ -8,8 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: localhost
-    http:
+  - http:
       paths:
       - path: /auth(/|$)(.*)
         pathType: ImplementationSpecific

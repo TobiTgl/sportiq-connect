@@ -81,16 +81,23 @@ gcloud artifacts repositories add-iam-policy-binding cloud-project-registry --lo
 gcloud firestore databases create --location=europe-west3 --database=cloud-project
 gcloud compute addresses create cloud-project-prod --global --ip-version=IPV4
 gcloud compute addresses describe cloud-project-prod --global 
--> add ip to ingress-controller-prod.yaml (loadbalancer ip line 351)
-gcloud storage buckets create gs://htwg-cloud-project (name der noch frei ist)
+-> add ip to ingress-controller-prod.yaml (loadbalancer ip line 351 or leave out & ingress controller will automatically choose an ip (not static))
+gcloud storage buckets create gs://htwg-cloud-project-<NUMBER> (name der noch frei ist)
 -> in gke.tf change bucked name to bucked you created
-activate identity platform in gcloud console (didnt find the command)
-add provider email/password
 
 optional:
 gcloud components install kubectl
 gcloud components install gke-gcloud-auth-plugin
 ```
+manual steps:
+- activate identity platform in gcloud console (didn't find the command)
+- add provider email/password
+- activate multitenancy: gcloud -> Identity Platform -> Multitenancy -> Settings -> activate
+- add identity platform api & auth domain to frontend .env file (identity platform  -> Provider -> Application setup details)
+- add Tenants (Free, Standard, Company)
+- create Strava dev application in your strava account. Add your callback domain for strava auth flow 
+- Add strava client id & secret to backend .env & github actions secret
+
 secrets for gh-actions workflow:
 PROJECT_ID: ID of your gcloud project
 REGION: region of your kubernetes cluster
@@ -100,7 +107,7 @@ TLS_CRT: TLS certificate (base64 encoded)
 TLS_KEY: TLS private key (base64 encoded)
 TLS_CRT_COMPANY: TLS certificate (base64 encoded)
 TLS_KEY_COMPANY: TLS private key (base64 encoded)
-FIREBASE_SERIVCE_ACCOUNT: serivce account with firebase permissions (for demo purposes same as gh actions serivce account) (base64 encoded)
+FIREBASE_SERIVCE_ACCOUNT: serivce account with firebase permissions (for demo purposes same as gh actions serivce account) (base64 encoded json file content)
 GCP_CREDENTIALS: gcloud service account credentials json
 -   gcloud -> IAM -> Service account -> create service account, roles (kubernetes engine admin, compute admin, artifact registry admin, firestore admin, Security administrator/Sicherheitsadministrator, Service Account Key Creator/Ersteller von Dienstkonto-Tokens, basic editor/bearbeiter (gcloud roles are a huge pain so I just gave up and used editor role)) -> add key (json)
 
