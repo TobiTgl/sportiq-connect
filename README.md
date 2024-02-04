@@ -97,6 +97,8 @@ manual steps:
 - add Tenants (Free, Standard, Company)
 - create Strava dev application in your strava account. Add your callback domain for strava auth flow 
 - Add strava client id & secret to backend .env & github actions secret
+- request tls certificate & key from your provider
+- when using domain replace kubectl apply -f ingress.yaml with the commented out version above in build-and-push-image.yml & deploy-image.yml
 
 secrets for gh-actions workflow:
 PROJECT_ID: ID of your gcloud project
