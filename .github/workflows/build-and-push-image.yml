@@ -132,10 +132,12 @@ jobs:
 
       - name: Deploy to Kubernetes
         if: github.event.inputs.deploy == 'true' || github.event_name == 'push'
-        run: |
+        run: 
+#        kubectl apply -f tls-ingress-${{ github.event.inputs.env }}.yaml          
+          |
           cd ./kubernetes
           kubectl apply -f ingress-controller-${{ github.event.inputs.env }}.yaml
-          kubectl apply -f tls-ingress-${{ github.event.inputs.env }}.yaml
+          kubectl apply -f ingress.yaml
           kubectl apply -f ./auth-service/auth-deployment.yaml
           kubectl apply -f ./auth-service/auth-service.yaml
           kubectl apply -f ./administration-service/administration-deployment.yaml

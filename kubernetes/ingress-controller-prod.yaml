@@ -348,7 +348,7 @@ spec:
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
-  loadBalancerIP: 35.238.156.20
+#  loadBalancerIP: 34.160.147.109
   ports:
   - appProtocol: http
     name: http
