@@ -18,7 +18,6 @@ import { AUTH_SERVICE_URL, UserInfo } from './auth.pb';
 import { AuthService } from './auth.service';
 
 @Controller(AUTH_SERVICE_URL)
-@UseGuards(AuthGuard)
 export class AuthController {
   @Inject(AuthService)
   private readonly service: AuthService;
@@ -32,6 +31,7 @@ export class AuthController {
   }
 
   @Patch('settenant')
+  @UseGuards(AuthGuard)
   setTenant(@Req() req, @Body() body): Promise<void> {
     const user: DecodedIdToken = req.user;
     const userId = user?.uid;
@@ -50,17 +50,20 @@ export class AuthController {
   }
 
   @Get('gettenant')
+  @UseGuards(AuthGuard)
   getTenant(@Req() req): Promise<String> {
     const user: DecodedIdToken = req.user;
     return user?.tenant;
   }
 
   @Get('gettenant/list')
+  @UseGuards(AuthGuard)
   getTenantList(@Req() req): Promise<Array<String>> {
     return this.service.getTenantList();
   }
 
   @Post('users/create')
+  @UseGuards(AuthGuard)
   createUser(@Req() req, @Body() body): Promise<UserInfo> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
@@ -80,6 +83,7 @@ export class AuthController {
   }
 
   @Delete('users/delete/:id')
+  @UseGuards(AuthGuard)
   deleteUser(@Req() req, @Param() param): Promise<Boolean> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
@@ -99,6 +103,7 @@ export class AuthController {
   }
 
   @Get('users')
+  @UseGuards(AuthGuard)
   getUsers(@Req() req): Promise<Array<UserInfo>> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
@@ -116,6 +121,7 @@ export class AuthController {
   }
 
   @Patch('users/reset/:id')
+  @UseGuards(AuthGuard)
   resetPassword(@Req() req, @Param() param): Promise<Boolean> {
     const user: DecodedIdToken = req.user;
     const tenantId = user?.tenant;
@@ -132,5 +138,35 @@ export class AuthController {
     }
 
     return this.service.resetPassword(param.id);
+  }
+
+  @Post('admin')
+  createAdminUser(@Body() body): Promise<UserInfo> {
+    // check if admin-password was provided
+    const adminPassword = body.adminPassword;
+    if (!adminPassword) {
+      throw new BadRequestException('No admin password provided');
+    }
+
+    // check if admin-password is correct
+    if (adminPassword !== process.env.ADMIN_PASSWORD) {
+      throw new UnauthorizedException('Invalid admin password');
+    }
+
+    // check if name, email and password was provided
+    const displayName = body.displayName;
+    const email = body.email;
+    const tenant = body.tenant;
+    if (!displayName) {
+      throw new BadRequestException('No displayName provided');
+    }
+    if (!email) {
+      throw new BadRequestException('No email provided');
+    }
+    if (!tenant) {
+      throw new BadRequestException('No tenant provided');
+    }
+
+    return this.service.createUser(displayName, email, 'Admin', tenant);
   }
 }
