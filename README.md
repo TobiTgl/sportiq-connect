@@ -93,25 +93,60 @@ manual steps:
 - activate identity platform in gcloud console (didn't find the command)
 - add provider email/password
 - activate multitenancy: gcloud -> Identity Platform -> Multitenancy -> Settings -> activate
-- add identity platform api & auth domain to frontend .env file (identity platform  -> Provider -> Application setup details)
+- add identity platform api key & auth domain to frontend .env file (identity platform  -> Provider -> Application setup details)
 - add Tenants (Free, Standard, Company)
 - create Strava dev application in your strava account. Add your callback domain for strava auth flow 
 - Add strava client id & secret to backend .env & github actions secret
 - request tls certificate & key from your provider
 - when using domain replace kubectl apply -f ingress.yaml with the commented out version above in build-and-push-image.yml & deploy-image.yml
 
+## Github Actions Workflows:
+
+### build and push image
+- **trigger:** manually in github actions UI or by pushing a new tag beginning with "v"
+- **what it does:** builds docker images of frontend and backend microservices 
+- **required:** provide image version you want to give this build
+- **optional:** directly deploy image to kubernetes cluster (deploy checkbox)
+  - in dropdown select env you want to deploy to (dev/prod)
+
+### build gke infrastructure
+- **trigger:** manually in github actions UI
+- **what it does:** builds/destroys gke infrastructure
+- **required:** select env you want to build/destroy (dev/prod)
+
+### deploy image
+- **trigger:** manually in github actions UI
+- **what it does:** deploys images to gke infrastructure (default namespace)
+- **required:** select env (dev/prod) & version you want to deploy
+
+### deploy image company
+- **trigger:** manually in github actions UI
+- **what it does:** deploys images to gke infrastructure (company namespace)
+- **required:** select env (dev/prod) & version you want to deploy
+
+### enable autoscaler
+- **trigger:** manually in github actions UI
+- **what it does:** enables kubernetes autoscaler for microservice pods (default namespace)
+- **required:** select env (dev/prod)
+
+### enable autoscaler company
+- **trigger:** manually in github actions UI
+- **what it does:** enables kubernetes autoscaler for microservice pods (company namespace)
+- **required:** select env (dev/prod)
+
 secrets for gh-actions workflow:
-PROJECT_ID: ID of your gcloud project
-REGION: region of your kubernetes cluster
-CLIENT_ID: id of your strava dev account (enable in your strava account)
-CLIENT_SECRET: secret from strava dev account
-TLS_CRT: TLS certificate (base64 encoded)
-TLS_KEY: TLS private key (base64 encoded)
-TLS_CRT_COMPANY: TLS certificate (base64 encoded)
-TLS_KEY_COMPANY: TLS private key (base64 encoded)
-FIREBASE_SERIVCE_ACCOUNT: serivce account with firebase permissions (for demo purposes same as gh actions serivce account) (base64 encoded json file content)
-GCP_CREDENTIALS: gcloud service account credentials json
--   gcloud -> IAM -> Service account -> create service account, roles (kubernetes engine admin, compute admin, artifact registry admin, firestore admin, Security administrator/Sicherheitsadministrator, Service Account Key Creator/Ersteller von Dienstkonto-Tokens, basic editor/bearbeiter (gcloud roles are a huge pain so I just gave up and used editor role)) -> add key (json)
+- PROJECT_ID: ID of your gcloud project
+- REGION: region of your kubernetes cluster
+- CLIENT_ID: id of your strava dev account (enable in your strava account)
+- CLIENT_SECRET: secret from strava dev account
+- TLS_CRT: TLS certificate (base64 encoded)
+- TLS_KEY: TLS private key (base64 encoded)
+- TLS_CRT_COMPANY: TLS certificate (base64 encoded,needed for subdomain demo/seperate company namespace)
+- TLS_KEY_COMPANY: TLS private key (base64 encoded)
+- FIREBASE_SERIVCE_ACCOUNT: serivce account with firebase permissions (for demo purposes same as gh actions serivce account) (base64 encoded json file content)
+- GCP_CREDENTIALS: gcloud service account credentials json
+- download service account json: gcloud -> IAM -> Service account -> SERVICE ACCOUNT CREATED ABOVE -> add key (json) -> download  
+-   ~~gcloud -> IAM -> Service account -> create service account, roles (kubernetes engine admin, compute admin, artifact registry admin, firestore admin, Security administrator/Sicherheitsadministrator, Service Account Key Creator/Ersteller von Dienstkonto-Tokens, basic editor/bearbeiter (gcloud roles are a huge pain so I just gave up and used editor role)) -> add key (json)~~
 
 ## License
 
